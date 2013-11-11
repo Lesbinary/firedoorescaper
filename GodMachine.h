@@ -28,15 +28,11 @@ public:
 		trainingSet.push_back(sample);
 	}
 	bool isTrainingReady(){
-		int fire = 0;
-		for(int i = 0; i<trainingSet.size(); i++){
-			if(trainingSet[i].burn) fire++;
-		}
-		return ((fire >= 25) && ((trainingSet.size() - fire) >= 25));
 
+		return (trainingSet.size() > 20);
 	}
 	bool isReadyToCross(){
-		return classifySuccesses > 25;
+		return classifySuccesses > 50;
 	}
 	void classifySample(Sample sample){
 		int nearest = 0;
@@ -62,7 +58,7 @@ public:
 				nearest = i;
 			}
 		}
-		std::cout << "El valor más cercano es " << trainingSet[nearest].input[0] << " y la puerta arde: " << trainingSet[nearest].burn << std::endl;
+//		std::cout << "El valor más cercano a " << input << " es " << trainingSet[nearest].input[0] << " y la puerta arde: " << trainingSet[nearest].burn << std::endl;
 
 		return trainingSet[nearest].burn;
 	}

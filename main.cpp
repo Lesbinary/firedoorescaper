@@ -35,25 +35,27 @@ main(void) {
 
 
     // Main loop: stay will the game is on (i.e. the player is alive)
+    std::cout << "Empezamos el juego: " << std::endl;
     while (game->getGameStatus() == CGame::GS_PLAYING) {
     	machine.clearTrainingSet();
 
         const CFireDoor& fd = game->getCurrentFireDoor();
+        printGameStatus(*game);
 
-        //AAlmacenamos el conjunto de entrenamiento
+        //Almacenamos el conjunto de entrenamiento
     	while(!machine.isTrainingReady()){
         //for (unsigned i=0; i < 5; i++) {
-            game->nextStep();
             printGameStatus(*game);
-            s.burn=fd.isOnFire();
             s.input=fd.getNextStepInputs();
+            game->nextStep();
+            s.burn=fd.isOnFire();
             machine.addTrainingSample(s);
         }
     	while(!machine.isReadyToCross() || machine.isDoorOnFire(fd.getNextStepInputs()[0])){
-            game->nextStep();
-            printGameStatus(*game);
-            s.burn=fd.isOnFire();
+    		printGameStatus(*game);
             s.input=fd.getNextStepInputs();
+            game->nextStep();
+            s.burn=fd.isOnFire();
             machine.classifySample(s);
             machine.addTrainingSample(s);
     	}
