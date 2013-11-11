@@ -40,16 +40,23 @@ main(void) {
 
         const CFireDoor& fd = game->getCurrentFireDoor();
 
-        // Do some game steps and print values
+        //AAlmacenamos el conjunto de entrenamiento
     	while(!machine.isTrainingReady()){
         //for (unsigned i=0; i < 5; i++) {
-
+            game->nextStep();
             printGameStatus(*game);
             s.burn=fd.isOnFire();
             s.input=fd.getNextStepInputs();
             machine.addTrainingSample(s);
-            game->nextStep();
         }
+    	while(!machine.isReadyToCross() || machine.isDoorOnFire(fd.getNextStepInputs()[0])){
+            game->nextStep();
+            printGameStatus(*game);
+            s.burn=fd.isOnFire();
+            s.input=fd.getNextStepInputs();
+            machine.classifySample(s);
+            machine.addTrainingSample(s);
+    	}
 
         // Try to cross the current FireDoor
         printGameStatus(*game);
@@ -59,6 +66,7 @@ main(void) {
             std::cout << "!!!!!!!!!!! PLAYER GOT BURNED OUT !!!!!!!!!!!!!!\n";
         else
             std::cout << "****** DOOR PASSED *****\n";
+
     }
 
     // Game Over
