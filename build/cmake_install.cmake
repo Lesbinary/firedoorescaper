@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Install script for directory: /home/antonio/git/firedoorescaper/src
+=======
+# Install script for directory: /home/leopoldo/workspaceC/fretsonfire/src
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,7 +42,15 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
+<<<<<<< HEAD
 FILE(WRITE "/home/antonio/git/firedoorescaper/build/${CMAKE_INSTALL_MANIFEST}" "")
+=======
+FILE(WRITE "/home/leopoldo/workspaceC/fretsonfire/build/${CMAKE_INSTALL_MANIFEST}" "")
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
+<<<<<<< HEAD
   FILE(APPEND "/home/antonio/git/firedoorescaper/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+=======
+  FILE(APPEND "/home/leopoldo/workspaceC/fretsonfire/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 ENDFOREACH(file)

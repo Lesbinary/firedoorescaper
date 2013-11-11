@@ -6,19 +6,31 @@
 
 #IncludeRegexTransform: 
 
+<<<<<<< HEAD
 /home/antonio/git/firedoorescaper/src/../include/cfiredoor.h
+=======
+/home/leopoldo/workspaceC/fretsonfire/src/../include/cfiredoor.h
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 vector
 -
 boost/noncopyable.hpp
 -
 
+<<<<<<< HEAD
 /home/antonio/git/firedoorescaper/src/../include/cgame.h
+=======
+/home/leopoldo/workspaceC/fretsonfire/src/../include/cgame.h
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 vector
 -
 boost/noncopyable.hpp
 -
 
+<<<<<<< HEAD
 /home/antonio/git/firedoorescaper/src/../include/crandomgenerator.h
+=======
+/home/leopoldo/workspaceC/fretsonfire/src/../include/crandomgenerator.h
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 vector
 -
 boost/noncopyable.hpp
@@ -30,7 +42,11 @@ boost/random/uniform_int_distribution.hpp
 boost/random/uniform_real_distribution.hpp
 -
 
+<<<<<<< HEAD
 /home/antonio/git/firedoorescaper/src/cfiredoor.cpp
+=======
+/home/leopoldo/workspaceC/fretsonfire/src/cfiredoor.cpp
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 cmath
 -
 cfiredoor.h
@@ -38,9 +54,17 @@ cfiredoor.h
 crandomgenerator.h
 -
 
+<<<<<<< HEAD
 /home/antonio/git/firedoorescaper/src/cgame.cpp
+=======
+/home/leopoldo/workspaceC/fretsonfire/src/cgame.cpp
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 cgame.h
+<<<<<<< HEAD
 /home/antonio/git/firedoorescaper/src/cgame.h
+=======
+/home/leopoldo/workspaceC/fretsonfire/src/cgame.h
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 cfiredoor.h
 -
 crandomgenerator.h
@@ -48,7 +72,15 @@ crandomgenerator.h
 cmath
 -
 
+<<<<<<< HEAD
 /home/antonio/git/firedoorescaper/src/crandomgenerator.cpp
+=======
+/home/leopoldo/workspaceC/fretsonfire/src/crandomgenerator.cpp
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 crandomgenerator.h
+<<<<<<< HEAD
 /home/antonio/git/firedoorescaper/src/crandomgenerator.h
+=======
+/home/leopoldo/workspaceC/fretsonfire/src/crandomgenerator.h
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 

@@ -10,7 +10,11 @@ SET(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/CMakeCCompiler.cmake"
   "CMakeFiles/CMakeCXXCompiler.cmake"
   "CMakeFiles/CMakeSystem.cmake"
+<<<<<<< HEAD
   "/home/antonio/git/firedoorescaper/src/CMakeLists.txt"
+=======
+  "/home/leopoldo/workspaceC/fretsonfire/src/CMakeLists.txt"
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
   "/usr/share/cmake-2.8/Modules/CMakeCCompiler.cmake.in"
   "/usr/share/cmake-2.8/Modules/CMakeCCompilerABI.c"
   "/usr/share/cmake-2.8/Modules/CMakeCInformation.cmake"

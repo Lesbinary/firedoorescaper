@@ -32,10 +32,18 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
+<<<<<<< HEAD
 CMAKE_SOURCE_DIR = /home/antonio/git/firedoorescaper/src
+=======
+CMAKE_SOURCE_DIR = /home/leopoldo/workspaceC/fretsonfire/src
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 
 # The top-level build directory on which CMake was run.
+<<<<<<< HEAD
 CMAKE_BINARY_DIR = /home/antonio/git/firedoorescaper/build
+=======
+CMAKE_BINARY_DIR = /home/leopoldo/workspaceC/fretsonfire/build
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 
 # Include any dependencies generated for this target.
 include CMakeFiles/FireDoorEscaper.dir/depend.make
@@ -46,19 +54,62 @@ include CMakeFiles/FireDoorEscaper.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/FireDoorEscaper.dir/flags.make
 
+<<<<<<< HEAD
+=======
+CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o: CMakeFiles/FireDoorEscaper.dir/flags.make
+CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o: /home/leopoldo/workspaceC/fretsonfire/src/crandomgenerator.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/leopoldo/workspaceC/fretsonfire/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o -c /home/leopoldo/workspaceC/fretsonfire/src/crandomgenerator.cpp
+
+CMakeFiles/FireDoorEscaper.dir/crandomgenerator.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/FireDoorEscaper.dir/crandomgenerator.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/leopoldo/workspaceC/fretsonfire/src/crandomgenerator.cpp > CMakeFiles/FireDoorEscaper.dir/crandomgenerator.i
+
+CMakeFiles/FireDoorEscaper.dir/crandomgenerator.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/FireDoorEscaper.dir/crandomgenerator.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/leopoldo/workspaceC/fretsonfire/src/crandomgenerator.cpp -o CMakeFiles/FireDoorEscaper.dir/crandomgenerator.s
+
+CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o.requires:
+.PHONY : CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o.requires
+
+CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o.provides: CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o.requires
+	$(MAKE) -f CMakeFiles/FireDoorEscaper.dir/build.make CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o.provides.build
+.PHONY : CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o.provides
+
+CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o.provides.build: CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o
+
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 CMakeFiles/FireDoorEscaper.dir/cgame.o: CMakeFiles/FireDoorEscaper.dir/flags.make
+<<<<<<< HEAD
 CMakeFiles/FireDoorEscaper.dir/cgame.o: /home/antonio/git/firedoorescaper/src/cgame.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/antonio/git/firedoorescaper/build/CMakeFiles $(CMAKE_PROGRESS_1)
+=======
+CMakeFiles/FireDoorEscaper.dir/cgame.o: /home/leopoldo/workspaceC/fretsonfire/src/cgame.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/leopoldo/workspaceC/fretsonfire/build/CMakeFiles $(CMAKE_PROGRESS_2)
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/FireDoorEscaper.dir/cgame.o"
+<<<<<<< HEAD
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/FireDoorEscaper.dir/cgame.o -c /home/antonio/git/firedoorescaper/src/cgame.cpp
+=======
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/FireDoorEscaper.dir/cgame.o -c /home/leopoldo/workspaceC/fretsonfire/src/cgame.cpp
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 
 CMakeFiles/FireDoorEscaper.dir/cgame.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/FireDoorEscaper.dir/cgame.i"
+<<<<<<< HEAD
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/antonio/git/firedoorescaper/src/cgame.cpp > CMakeFiles/FireDoorEscaper.dir/cgame.i
+=======
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/leopoldo/workspaceC/fretsonfire/src/cgame.cpp > CMakeFiles/FireDoorEscaper.dir/cgame.i
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 
 CMakeFiles/FireDoorEscaper.dir/cgame.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/FireDoorEscaper.dir/cgame.s"
+<<<<<<< HEAD
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/antonio/git/firedoorescaper/src/cgame.cpp -o CMakeFiles/FireDoorEscaper.dir/cgame.s
+=======
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/leopoldo/workspaceC/fretsonfire/src/cgame.cpp -o CMakeFiles/FireDoorEscaper.dir/cgame.s
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 
 CMakeFiles/FireDoorEscaper.dir/cgame.o.requires:
 .PHONY : CMakeFiles/FireDoorEscaper.dir/cgame.o.requires
@@ -70,18 +121,35 @@ CMakeFiles/FireDoorEscaper.dir/cgame.o.provides: CMakeFiles/FireDoorEscaper.dir/
 CMakeFiles/FireDoorEscaper.dir/cgame.o.provides.build: CMakeFiles/FireDoorEscaper.dir/cgame.o
 
 CMakeFiles/FireDoorEscaper.dir/cfiredoor.o: CMakeFiles/FireDoorEscaper.dir/flags.make
+<<<<<<< HEAD
 CMakeFiles/FireDoorEscaper.dir/cfiredoor.o: /home/antonio/git/firedoorescaper/src/cfiredoor.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/antonio/git/firedoorescaper/build/CMakeFiles $(CMAKE_PROGRESS_2)
+=======
+CMakeFiles/FireDoorEscaper.dir/cfiredoor.o: /home/leopoldo/workspaceC/fretsonfire/src/cfiredoor.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/leopoldo/workspaceC/fretsonfire/build/CMakeFiles $(CMAKE_PROGRESS_3)
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/FireDoorEscaper.dir/cfiredoor.o"
+<<<<<<< HEAD
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/FireDoorEscaper.dir/cfiredoor.o -c /home/antonio/git/firedoorescaper/src/cfiredoor.cpp
+=======
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/FireDoorEscaper.dir/cfiredoor.o -c /home/leopoldo/workspaceC/fretsonfire/src/cfiredoor.cpp
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 
 CMakeFiles/FireDoorEscaper.dir/cfiredoor.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/FireDoorEscaper.dir/cfiredoor.i"
+<<<<<<< HEAD
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/antonio/git/firedoorescaper/src/cfiredoor.cpp > CMakeFiles/FireDoorEscaper.dir/cfiredoor.i
+=======
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/leopoldo/workspaceC/fretsonfire/src/cfiredoor.cpp > CMakeFiles/FireDoorEscaper.dir/cfiredoor.i
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 
 CMakeFiles/FireDoorEscaper.dir/cfiredoor.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/FireDoorEscaper.dir/cfiredoor.s"
+<<<<<<< HEAD
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/antonio/git/firedoorescaper/src/cfiredoor.cpp -o CMakeFiles/FireDoorEscaper.dir/cfiredoor.s
+=======
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/leopoldo/workspaceC/fretsonfire/src/cfiredoor.cpp -o CMakeFiles/FireDoorEscaper.dir/cfiredoor.s
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 
 CMakeFiles/FireDoorEscaper.dir/cfiredoor.o.requires:
 .PHONY : CMakeFiles/FireDoorEscaper.dir/cfiredoor.o.requires
@@ -124,17 +192,30 @@ FireDoorEscaper_OBJECTS = \
 # External object files for target FireDoorEscaper
 FireDoorEscaper_EXTERNAL_OBJECTS =
 
+<<<<<<< HEAD
 /home/antonio/git/firedoorescaper/lib/libFireDoorEscaper.a: CMakeFiles/FireDoorEscaper.dir/cgame.o
 /home/antonio/git/firedoorescaper/lib/libFireDoorEscaper.a: CMakeFiles/FireDoorEscaper.dir/cfiredoor.o
 /home/antonio/git/firedoorescaper/lib/libFireDoorEscaper.a: CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o
 /home/antonio/git/firedoorescaper/lib/libFireDoorEscaper.a: CMakeFiles/FireDoorEscaper.dir/build.make
 /home/antonio/git/firedoorescaper/lib/libFireDoorEscaper.a: CMakeFiles/FireDoorEscaper.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX static library /home/antonio/git/firedoorescaper/lib/libFireDoorEscaper.a"
+=======
+/home/leopoldo/workspaceC/fretsonfire/lib/libFireDoorEscaper.a: CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o
+/home/leopoldo/workspaceC/fretsonfire/lib/libFireDoorEscaper.a: CMakeFiles/FireDoorEscaper.dir/cgame.o
+/home/leopoldo/workspaceC/fretsonfire/lib/libFireDoorEscaper.a: CMakeFiles/FireDoorEscaper.dir/cfiredoor.o
+/home/leopoldo/workspaceC/fretsonfire/lib/libFireDoorEscaper.a: CMakeFiles/FireDoorEscaper.dir/build.make
+/home/leopoldo/workspaceC/fretsonfire/lib/libFireDoorEscaper.a: CMakeFiles/FireDoorEscaper.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX static library /home/leopoldo/workspaceC/fretsonfire/lib/libFireDoorEscaper.a"
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 	$(CMAKE_COMMAND) -P CMakeFiles/FireDoorEscaper.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/FireDoorEscaper.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
+<<<<<<< HEAD
 CMakeFiles/FireDoorEscaper.dir/build: /home/antonio/git/firedoorescaper/lib/libFireDoorEscaper.a
+=======
+CMakeFiles/FireDoorEscaper.dir/build: /home/leopoldo/workspaceC/fretsonfire/lib/libFireDoorEscaper.a
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 .PHONY : CMakeFiles/FireDoorEscaper.dir/build
 
 CMakeFiles/FireDoorEscaper.dir/requires: CMakeFiles/FireDoorEscaper.dir/cgame.o.requires
@@ -147,6 +228,10 @@ CMakeFiles/FireDoorEscaper.dir/clean:
 .PHONY : CMakeFiles/FireDoorEscaper.dir/clean
 
 CMakeFiles/FireDoorEscaper.dir/depend:
+<<<<<<< HEAD
 	cd /home/antonio/git/firedoorescaper/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/antonio/git/firedoorescaper/src /home/antonio/git/firedoorescaper/src /home/antonio/git/firedoorescaper/build /home/antonio/git/firedoorescaper/build /home/antonio/git/firedoorescaper/build/CMakeFiles/FireDoorEscaper.dir/DependInfo.cmake --color=$(COLOR)
+=======
+	cd /home/leopoldo/workspaceC/fretsonfire/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/leopoldo/workspaceC/fretsonfire/src /home/leopoldo/workspaceC/fretsonfire/src /home/leopoldo/workspaceC/fretsonfire/build /home/leopoldo/workspaceC/fretsonfire/build /home/leopoldo/workspaceC/fretsonfire/build/CMakeFiles/FireDoorEscaper.dir/DependInfo.cmake --color=$(COLOR)
+>>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 .PHONY : CMakeFiles/FireDoorEscaper.dir/depend
 

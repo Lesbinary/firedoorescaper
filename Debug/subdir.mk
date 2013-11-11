@@ -4,12 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../GodMachine.cpp \
 ../main.cpp 
 
 OBJS += \
+./GodMachine.o \
 ./main.o 
 
 CPP_DEPS += \
+./GodMachine.d \
 ./main.d 
 
 
