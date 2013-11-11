@@ -1,2 +1,2 @@
-/usr/bin/ar cr /home/leopoldo/firedoorescaper/lib/libFireDoorEscaper.a  CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o CMakeFiles/FireDoorEscaper.dir/cgame.o CMakeFiles/FireDoorEscaper.dir/cfiredoor.o
-/usr/bin/ranlib /home/leopoldo/firedoorescaper/lib/libFireDoorEscaper.a
+/usr/bin/ar cr /home/antonio/git/firedoorescaper/lib/libFireDoorEscaper.a  CMakeFiles/FireDoorEscaper.dir/cgame.o CMakeFiles/FireDoorEscaper.dir/cfiredoor.o CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o
+/usr/bin/ranlib /home/antonio/git/firedoorescaper/lib/libFireDoorEscaper.a
