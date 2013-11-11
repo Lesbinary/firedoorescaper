@@ -1,34 +1,9 @@
 #include "include/cgame.h"
 #include "include/cfiredoor.h"
+#include "GodMachine.h"
 #include <iostream>
 
 using namespace FireDoorEscaper;
-
-
-struct Sample{
-	std::vector<double> input;
-	bool burn;
-};
-
-class GodMachine {
-public:
-	GodMachine(){}
-	virtual ~GodMachine(){}
-	void addTrainingSample(Sample sample){
-		trainingSet.push_back(sample);
-	}
-	bool isTrainingReady(){
-		return trainingSet.size()==5;
-	}
-	void clearTrainingSet(){
-		trainingSet.clear();
-	}
-private:
-	std::vector<Sample> trainingSet;
-};
-
-
-
 
 // Print Game Status Values
 void
