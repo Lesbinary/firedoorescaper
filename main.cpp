@@ -14,7 +14,7 @@ using namespace FireDoorEscaper;
 // - Regresión logística
 // - Redes neuronales
 //     - Feed-Forward ( Backpropagation)
-//     - Recurrentes / Generales (Genéticos u otros) <- Medio difícil
+//     - Recurrentes / Generales (Genéticos u otros) <- Medio-difícil
 
 //Difíciles
 // - Support Vector Machines
@@ -23,9 +23,9 @@ using namespace FireDoorEscaper;
 
 
 //TODO: Técnicas de clasficiación a implementar
-// - Regularización
+// - Regularización <- Medio
 // - Reducción de dimensionalidad
-//      - Recomendado: PCA
+//      - Recomendado: PCA <- Medio-difícil
 //      - Alternativo: Aprendizaje no-supervisado (k-means, etc)
 
 // Print Game Status Values
