@@ -28,6 +28,14 @@ using namespace FireDoorEscaper;
 //      - Recomendado: PCA <- Medio-difícil
 //      - Alternativo: Aprendizaje no-supervisado (k-means, etc)
 
+
+//Niveles para la nota de la práctica:
+//·Básico: 2 modelos (fácil y media como mínimo)
+//         1 técnica
+// Nota razonable: 3 modelos (Medio y difícil)
+//                 1-2 técnicas
+
+
 // Print Game Status Values
 void
 printGameStatus(const CGame& g) {
