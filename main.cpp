@@ -5,6 +5,23 @@
 
 using namespace FireDoorEscaper;
 
+//TODO: Heurísticas a implementar
+//Fáciles
+// - Lineal (Perceptron, Regresión Lineal, etc)
+// - Lineal con transoformaciones no lineales
+
+//Medios
+// - Regresión logística
+// - Redes neuronales
+//     - Feed-Forward ( Backpropagation)
+//     - Recurrentes / Generales (Genéticos u otros) <- Medio difícil
+
+//Difíciles
+// - Support Vector Machines
+//     - Kernel Methods (Difícil++)
+// - Radial Basis Functions  (Difícil--)
+
+
 // Print Game Status Values
 void
 printGameStatus(const CGame& g) {
