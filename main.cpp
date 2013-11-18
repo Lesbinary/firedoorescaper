@@ -5,7 +5,7 @@
 
 using namespace FireDoorEscaper;
 
-//TODO: Heurísticas a implementar
+//TODO: Métodos de clasificación a implementar
 //Fáciles
 // - Lineal (Perceptron, Regresión Lineal, etc)
 // - Lineal con transoformaciones no lineales
@@ -21,6 +21,12 @@ using namespace FireDoorEscaper;
 //     - Kernel Methods (Difícil++)
 // - Radial Basis Functions  (Difícil--)
 
+
+//TODO: Técnicas de clasficiación a implementar
+// - Regularización
+// - Reducción de dimensionalidad
+//      - Recomendado: PCA
+//      - Alternativo: Aprendizaje no-supervisado (k-means, etc)
 
 // Print Game Status Values
 void
