@@ -5,6 +5,37 @@
 
 using namespace FireDoorEscaper;
 
+//TODO: Métodos de clasificación a implementar
+//Fáciles
+// - Lineal (Perceptron, Regresión Lineal, etc)
+// - Lineal con transoformaciones no lineales
+
+//Medios
+// - Regresión logística
+// - Redes neuronales
+//     - Feed-Forward ( Backpropagation)
+//     - Recurrentes / Generales (Genéticos u otros) <- Medio-difícil
+
+//Difíciles
+// - Support Vector Machines
+//     - Kernel Methods (Difícil++)
+// - Radial Basis Functions  (Difícil--)
+
+
+//TODO: Técnicas de clasficiación a implementar
+// - Regularización <- Medio
+// - Reducción de dimensionalidad
+//      - Recomendado: PCA <- Medio-difícil
+//      - Alternativo: Aprendizaje no-supervisado (k-means, etc)
+
+
+//Niveles para la nota de la práctica:
+//·Básico: 2 modelos (fácil y media como mínimo)
+//         1 técnica
+// Nota razonable: 3 modelos (Medio y difícil)
+//                 1-2 técnicas
+
+
 // Print Game Status Values
 void
 printGameStatus(const CGame& g) {
@@ -35,21 +66,30 @@ main(void) {
 
 
     // Main loop: stay will the game is on (i.e. the player is alive)
+    std::cout << "Empezamos el juego: " << std::endl;
     while (game->getGameStatus() == CGame::GS_PLAYING) {
     	machine.clearTrainingSet();
 
         const CFireDoor& fd = game->getCurrentFireDoor();
+        printGameStatus(*game);
 
-        // Do some game steps and print values
+        //Almacenamos el conjunto de entrenamiento
     	while(!machine.isTrainingReady()){
         //for (unsigned i=0; i < 5; i++) {
-
             printGameStatus(*game);
-            s.burn=fd.isOnFire();
             s.input=fd.getNextStepInputs();
-            machine.addTrainingSample(s);
             game->nextStep();
+            s.burn=fd.isOnFire();
+            machine.addTrainingSample(s);
         }
+    	while(!machine.isReadyToCross() || machine.isDoorOnFire(fd.getNextStepInputs()[0])){
+    		printGameStatus(*game);
+            s.input=fd.getNextStepInputs();
+            game->nextStep();
+            s.burn=fd.isOnFire();
+            machine.classifySample(s);
+            machine.addTrainingSample(s);
+    	}
 
         // Try to cross the current FireDoor
         printGameStatus(*game);
@@ -59,6 +99,7 @@ main(void) {
             std::cout << "!!!!!!!!!!! PLAYER GOT BURNED OUT !!!!!!!!!!!!!!\n";
         else
             std::cout << "****** DOOR PASSED *****\n";
+
     }
 
     // Game Over
