@@ -9,6 +9,8 @@
 #define LRMACHINE_H_
 
 #include "IMachine.h"
+#include <cmath>
+#include <iostream>
 
 class LRMachine : public IMachine {
 public:
@@ -25,6 +27,14 @@ public:
 private:
 	std::vector<Sample> trainingSet;
 	int classifySuccesses;
+
+	// Internal functions
+	double sigmoid(double z);
+	double cost(double tetha[], int sizeT, double X[][100], double y[], int sizeY);
+	void grad(double tetha[], int sizeT, double X[][100], double y[], int sizeY, double grad[]);
+
+
+
 };
 
 #endif /* LRMACHINE_H_ */

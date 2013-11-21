@@ -20,10 +20,18 @@ enum Machine {LogisticRegresion, KVecinos};
 class GodMachine {
 public:
 	GodMachine(){
-		KVMachine derivada;
-//		std::cout << "Inicializo la máquina\n";
-		machine = new KVMachine();
+		machine = new LRMachine();
 	}
+
+	GodMachine(Machine m){
+		switch(m){
+			case LogisticRegresion: machine=new LRMachine();
+				break;
+			case KVecinos: machine=new KVMachine();
+				break;
+		}
+	}
+
 	virtual ~GodMachine(){}
 	void addTrainingSample(Sample sample){
 		machine->addTrainingSample(sample);
