@@ -11,64 +11,40 @@
 #include <iostream>     // std::cout
 #include <cmath>        // std::abs
 #include <float.h>
+#include "IMachine.h"
+#include "KVMachine.h"
+#include "LRMachine.h"
 
-
-struct Sample{
-	std::vector<double> input;
-	bool burn;
-};
+enum Machine {LogisticRegresion, KVecinos};
 
 class GodMachine {
 public:
 	GodMachine(){
-		classifySuccesses = 0;
+		KVMachine derivada;
+//		std::cout << "Inicializo la máquina\n";
+		machine = new KVMachine();
 	}
 	virtual ~GodMachine(){}
 	void addTrainingSample(Sample sample){
-		trainingSet.push_back(sample);
+		machine->addTrainingSample(sample);
 	}
 	bool isTrainingReady(){
-
-		return (trainingSet.size() > 20);
+		return machine->isTrainingReady();
 	}
 	bool isReadyToCross(){
-		return classifySuccesses > 50;
+		return machine->isReadyToCross();
 	}
 	void classifySample(Sample sample){
-		int nearest = 0;
-		double nearestDistance = DBL_MAX;
-		for(int i = 0; i < trainingSet.size(); i++){
-			double tmp = std::abs((sample.input[0] - trainingSet[i].input[0]));
-			if (tmp < nearestDistance){
-				nearestDistance = tmp;
-				nearest = i;
-			}
-		}
-		if (trainingSet[nearest].burn == sample.burn){
-			classifySuccesses++;
-		}
+		machine->classifySample(sample);
 	}
 	bool isDoorOnFire(double input){
-		int nearest = 0;
-		double nearestDistance = DBL_MAX;
-		for(int i = 0; i < trainingSet.size(); i++){
-			double tmp = std::abs((input - trainingSet[i].input[0]));
-			if (tmp < nearestDistance){
-				nearestDistance = tmp;
-				nearest = i;
-			}
-		}
-//		std::cout << "El valor más cercano a " << input << " es " << trainingSet[nearest].input[0] << " y la puerta arde: " << trainingSet[nearest].burn << std::endl;
-
-		return trainingSet[nearest].burn;
+		return machine->isDoorOnFire(input);
 	}
 	void clearTrainingSet(){
-		trainingSet.clear();
-		classifySuccesses = 0;
+		machine->clearTrainingSet();
 	}
 private:
-	std::vector<Sample> trainingSet;
-	int classifySuccesses;
+	IMachine* machine;
 };
 
 
