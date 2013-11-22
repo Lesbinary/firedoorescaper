@@ -10,7 +10,7 @@ public:
 	virtual bool isTrainingReady()=0;
 	virtual bool isReadyToCross()=0;
 	virtual void classifySample(Sample sample)=0;
-	virtual bool isDoorOnFire(double input)=0;
+	virtual bool isDoorOnFire(double input[])=0;
 	virtual void clearTrainingSet()=0;
 };
 

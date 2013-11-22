@@ -21,7 +21,7 @@ public:
 	bool isTrainingReady();
 	bool isReadyToCross();
 	void classifySample(Sample sample);
-	bool isDoorOnFire(double input);
+	bool isDoorOnFire(double input[]);
 	void clearTrainingSet();
 
 private:

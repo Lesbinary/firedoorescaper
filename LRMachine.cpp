@@ -22,14 +22,14 @@ void LRMachine::addTrainingSample(Sample sample) {
 }
 
 bool LRMachine::isTrainingReady() {
-	if(trainingSet.size() > 20){
-		trainByGradient(400, 0.001);
+	if(trainingSet.size() > 100){
+		trainByGradient(1000, 0.001);
 		return true;
 	} else return false;
 }
 
 bool LRMachine::isReadyToCross() {
-	return classifySuccesses > 50;
+	return classifySuccesses > 100;
 }
 
 void LRMachine::classifySample(Sample sample) {
@@ -55,28 +55,53 @@ void LRMachine::classifySample(Sample sample) {
 			p = theta[i];
 		else p += theta[i]*sample.input[i-1];
 	}
-	std::cout << "La probabilidad de que la puerta con valor: " << sample.input[0] << " es: " << p << std::endl;
+	p=sigmoid(p);
 	if(p>0.5 && sample.burn){
+		std::cout << "La puerta para la entrada: " << sample.input[0] << " está ardiendo" << std::endl;
 		std::cout << "Ha clasificao de puta madre" << std::endl;
 		this->classifySuccesses++;
-	} else{
+	} else if (p<=0.5 && sample.burn){
+		std::cout << "La puerta para la entrada: " << sample.input[0] << " está apagada" << std::endl;
 		std::cout << "Pinyico... volviendo a entrenar" << std::endl;
-		this->classifySuccesses--;
+//		this->classifySuccesses--;
 		this->trainingSet.push_back(sample);
-		this->trainByGradient(1000, 0.01);
-	}
+		this->trainByGradient(1000, 0.001);
+	} else if(p>0.5 && !sample.burn){
+		std::cout << "La puerta para la entrada: " << sample.input[0] << " está ardiendo" << std::endl;
+		std::cout << "Pinyico... volviendo a entrenar" << std::endl;
+//		this->classifySuccesses--;
+		this->trainingSet.push_back(sample);
+		this->trainByGradient(1000, 0.001);
+	} else if(p<=0.5 && !sample.burn){
+		std::cout << "La puerta para la entrada: " << sample.input[0] << " está apagada" << std::endl;
+		std::cout << "Ha clasificao de puta madre" << std::endl;
+		this->classifySuccesses++;
+	} else std::cout << "No se que carajo ha pasado" << std::endl;
 
 }
 
-bool LRMachine::isDoorOnFire(double input) {
+bool LRMachine::isDoorOnFire(double input[]) {
+	double p = 0.0;
+	for(int i=0; i<nFeatures+1; i++){
+		if(i==0)
+			p = theta[i];
+		else p += theta[i]*input[i-1];
+	}
+	p=sigmoid(p);
+	std::cout << "La probabilidad de que la puerta con valor: " << input[0] << " es: " << p << std::endl;
+	if(p>0.5)
+		return false;
+	else return true;
 }
 
 void LRMachine::clearTrainingSet() {
+	trainingSet.clear();
+	classifySuccesses=0;
 }
 
 double LRMachine::sigmoid(double z) {
 	double e = 2.71828182845904523536;
-	return 1/(1+pow(e,z));
+	return 1/(1+pow(e,-z));
 }
 
 double LRMachine::cost(double theta[], int sizeT, double X[][100],
@@ -108,7 +133,7 @@ void LRMachine::grad(double theta[], int sizeT, double X[][100], double y[],
 			h = sigmoid(h);
 			parcial += (h-y[i])*X[i][j];
 		}
-		grad[j] = parcial;
+		grad[j] = parcial/sizeY;
 	}
 }
 
@@ -120,29 +145,24 @@ void LRMachine::trainByGradient(int iter, double alpha) {
 	fillTheta(theta);
 	fillY(y);
 
-	// Imprimo cosas pa ver como va
-	std::cout << "Hay estos elementos: " << trainingSet.size() << std::endl;
-	for(int i=0;i<trainingSet.size(); i++){
-		for(int j=0; j<nFeatures+1; j++){
-			std::cout << X[i][j] << " \n";
-		}
-		std::cout << std::endl;
-	}
-
 	for(int k=0; k<it; k++){
 		// Calculo el coste
 		double coste = cost(theta, nFeatures+1, X, y, trainingSet.size());
-		std::cout << "Para esta iteración el coste es: " << coste << std::endl;
+//		std::cout << "Para esta iteración el coste es: " << coste << std::endl;
 		// Recalculo theta para la siguiente iteracion
 		double gradiente[nFeatures+1];
 		grad(theta, nFeatures+1, X, y, trainingSet.size(), gradiente);
-		std::cout << "El nuevo theta para la it " << k << " es: ";
+//		std::cout << "El nuevo theta para la it " << k << " es: ";
 		for(int i=0; i<nFeatures+1; i++){
 			theta[i]=theta[i]-alpha*gradiente[i];
-			std::cout << theta[i]-alpha*gradiente[i] << " (" << alpha*gradiente[i] << ") ";
+//			std::cout << theta[i]-alpha*gradiente[i] << " (" << alpha*gradiente[i] << ") ";
 		}
-		std::cout << std::endl;
-		std::cout << "La variación en el coste es de: " << pCoste-coste << std::endl;
+//		std::cout << std::endl;
+//		std::cout << "La variación en el coste es de: " << coste-pCoste << std::endl;
+		if(coste-pCoste < 0.0001){
+			std::cout << "Estoy suficientemente entrenado!!!!!!\n";
+			break;
+		}
 		pCoste = coste;
 	}
 

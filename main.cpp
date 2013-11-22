@@ -2,6 +2,7 @@
 #include "include/cfiredoor.h"
 #include "GodMachine.h"
 #include <iostream>
+#include <vector>
 
 using namespace FireDoorEscaper;
 
@@ -82,7 +83,10 @@ main(void) {
             s.burn=fd.isOnFire();
             machine.addTrainingSample(s);
         }
-    	while(!machine.isReadyToCross() || machine.isDoorOnFire(fd.getNextStepInputs()[0])){
+    	//Hago esto para obtener un vector de doubles de los input
+    	std::vector<double> vIn = fd.getNextStepInputs();
+    	double* in = &vIn[0];
+    	while(!machine.isReadyToCross() || machine.isDoorOnFire(in)){
     		printGameStatus(*game);
             s.input=fd.getNextStepInputs();
             game->nextStep();

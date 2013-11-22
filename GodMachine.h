@@ -45,7 +45,7 @@ public:
 	void classifySample(Sample sample){
 		machine->classifySample(sample);
 	}
-	bool isDoorOnFire(double input){
+	bool isDoorOnFire(double input[]){
 		return machine->isDoorOnFire(input);
 	}
 	void clearTrainingSet(){

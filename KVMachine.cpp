@@ -42,11 +42,11 @@ void KVMachine::classifySample(Sample sample) {
 	}
 }
 
-bool KVMachine::isDoorOnFire(double input) {
+bool KVMachine::isDoorOnFire(double input[]) {
 	int nearest = 0;
 	double nearestDistance = DBL_MAX;
 	for(int i = 0; i < trainingSet.size(); i++){
-		double tmp = std::abs((input - trainingSet[i].input[0]));
+		double tmp = std::abs((input[0] - trainingSet[i].input[0]));
 		if (tmp < nearestDistance){
 			nearestDistance = tmp;
 			nearest = i;
