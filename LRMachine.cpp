@@ -22,14 +22,14 @@ void LRMachine::addTrainingSample(Sample sample) {
 }
 
 bool LRMachine::isTrainingReady() {
-	if(trainingSet.size() > 100){
-		trainByGradient(1000, 0.001);
+	if(trainingSet.size() > 5 ){
+		trainByGradient(1000, 0.00001);
 		return true;
 	} else return false;
 }
 
 bool LRMachine::isReadyToCross() {
-	return classifySuccesses > 100;
+	return classifySuccesses > 50;
 }
 
 void LRMachine::classifySample(Sample sample) {
@@ -56,26 +56,20 @@ void LRMachine::classifySample(Sample sample) {
 		else p += theta[i]*sample.input[i-1];
 	}
 	p=sigmoid(p);
-	if(p>0.5 && sample.burn){
-		std::cout << "La puerta para la entrada: " << sample.input[0] << " está ardiendo" << std::endl;
+	if((p>0.5 && sample.burn) || (p<=0.5 && !sample.burn)){
+		if(p>0.5)
+			std::cout << "Predigo que la puerta está encendida" << std::endl;
+		else std::cout << "Predigo que la puerta está apagada" << std::endl;
 		std::cout << "Ha clasificao de puta madre" << std::endl;
 		this->classifySuccesses++;
-	} else if (p<=0.5 && sample.burn){
-		std::cout << "La puerta para la entrada: " << sample.input[0] << " está apagada" << std::endl;
+	} else if ((p<=0.5 && sample.burn) || (p>0.5 && !sample.burn)){
+		if(p>0.5)
+			std::cout << "Predigo que la puerta está encendida" << std::endl;
+		else std::cout << "Predigo que la puerta está apagada" << std::endl;
 		std::cout << "Pinyico... volviendo a entrenar" << std::endl;
-//		this->classifySuccesses--;
 		this->trainingSet.push_back(sample);
-		this->trainByGradient(1000, 0.001);
-	} else if(p>0.5 && !sample.burn){
-		std::cout << "La puerta para la entrada: " << sample.input[0] << " está ardiendo" << std::endl;
-		std::cout << "Pinyico... volviendo a entrenar" << std::endl;
-//		this->classifySuccesses--;
-		this->trainingSet.push_back(sample);
-		this->trainByGradient(1000, 0.001);
-	} else if(p<=0.5 && !sample.burn){
-		std::cout << "La puerta para la entrada: " << sample.input[0] << " está apagada" << std::endl;
-		std::cout << "Ha clasificao de puta madre" << std::endl;
-		this->classifySuccesses++;
+		this->trainByGradient(1000, 0.000001);
+		this->classifySuccesses--;
 	} else std::cout << "No se que carajo ha pasado" << std::endl;
 
 }
@@ -90,8 +84,8 @@ bool LRMachine::isDoorOnFire(double input[]) {
 	p=sigmoid(p);
 	std::cout << "La probabilidad de que la puerta con valor: " << input[0] << " es: " << p << std::endl;
 	if(p>0.5)
-		return false;
-	else return true;
+		return true;
+	else return false;
 }
 
 void LRMachine::clearTrainingSet() {
@@ -138,19 +132,18 @@ void LRMachine::grad(double theta[], int sizeT, double X[][100], double y[],
 }
 
 void LRMachine::trainByGradient(int iter, double alpha) {
-	int it = 400;
 	double vari = 0.01;
 	double pCoste = 0.0;
+	double gradiente[nFeatures+1];
 	fillX(X);
 	fillTheta(theta);
 	fillY(y);
 
-	for(int k=0; k<it; k++){
+	for(int k=0; k<iter; k++){
 		// Calculo el coste
 		double coste = cost(theta, nFeatures+1, X, y, trainingSet.size());
 //		std::cout << "Para esta iteración el coste es: " << coste << std::endl;
 		// Recalculo theta para la siguiente iteracion
-		double gradiente[nFeatures+1];
 		grad(theta, nFeatures+1, X, y, trainingSet.size(), gradiente);
 //		std::cout << "El nuevo theta para la it " << k << " es: ";
 		for(int i=0; i<nFeatures+1; i++){
@@ -160,8 +153,8 @@ void LRMachine::trainByGradient(int iter, double alpha) {
 //		std::cout << std::endl;
 //		std::cout << "La variación en el coste es de: " << coste-pCoste << std::endl;
 		if(coste-pCoste < 0.0001){
-			std::cout << "Estoy suficientemente entrenado!!!!!!\n";
-			break;
+//			std::cout << "Estoy suficientemente entrenado!!!!!!\n";
+//			break;
 		}
 		pCoste = coste;
 	}

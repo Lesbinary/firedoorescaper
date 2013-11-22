@@ -63,7 +63,7 @@ main(void) {
 	GodMachine machine;
     CGame *game = new CGame(0);
     game->setGameDifficultyMode(CGame::GDM_SAMELEVEL);
-    Sample s;
+
 
 
     // Main loop: stay will the game is on (i.e. the player is alive)
@@ -77,6 +77,7 @@ main(void) {
         //Almacenamos el conjunto de entrenamiento
     	while(!machine.isTrainingReady()){
         //for (unsigned i=0; i < 5; i++) {
+    		Sample s;
             printGameStatus(*game);
             s.input=fd.getNextStepInputs();
             game->nextStep();
@@ -87,14 +88,15 @@ main(void) {
     	std::vector<double> vIn = fd.getNextStepInputs();
     	double* in = &vIn[0];
     	while(!machine.isReadyToCross() || machine.isDoorOnFire(in)){
+    		Sample s;
     		printGameStatus(*game);
             s.input=fd.getNextStepInputs();
             game->nextStep();
             s.burn=fd.isOnFire();
             machine.classifySample(s);
             machine.addTrainingSample(s);
+            vIn = fd.getNextStepInputs();
     	}
-
         // Try to cross the current FireDoor
         printGameStatus(*game);
         std::cout << "**** TRYING TO CROSS THE DOOR ****\n";
