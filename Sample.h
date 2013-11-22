@@ -10,9 +10,14 @@
 
 #include <vector>
 
-struct Sample{
+class Sample{
+public:
 	std::vector<double> input;
 	bool burn;
+
+	int getNFeatures(){
+		return input.size();
+	}
 };
 
 

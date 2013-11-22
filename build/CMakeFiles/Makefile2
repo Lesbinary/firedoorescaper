@@ -43,19 +43,14 @@ CMAKE_COMMAND = /usr/bin/cmake
 # The command to remove a file.
 RM = /usr/bin/cmake -E remove -f
 
+# Escaping for special characters.
+EQUALS = =
+
 # The top-level source directory on which CMake was run.
-<<<<<<< HEAD
 CMAKE_SOURCE_DIR = /home/antonio/git/firedoorescaper/src
-=======
-CMAKE_SOURCE_DIR = /home/leopoldo/workspaceC/fretsonfire/src
->>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 
 # The top-level build directory on which CMake was run.
-<<<<<<< HEAD
 CMAKE_BINARY_DIR = /home/antonio/git/firedoorescaper/build
-=======
-CMAKE_BINARY_DIR = /home/leopoldo/workspaceC/fretsonfire/build
->>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 
 #=============================================================================
 # Target rules for target CMakeFiles/FireDoorEscaper.dir
@@ -64,11 +59,7 @@ CMAKE_BINARY_DIR = /home/leopoldo/workspaceC/fretsonfire/build
 CMakeFiles/FireDoorEscaper.dir/all:
 	$(MAKE) -f CMakeFiles/FireDoorEscaper.dir/build.make CMakeFiles/FireDoorEscaper.dir/depend
 	$(MAKE) -f CMakeFiles/FireDoorEscaper.dir/build.make CMakeFiles/FireDoorEscaper.dir/build
-<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/antonio/git/firedoorescaper/build/CMakeFiles  1 2 3
-=======
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/leopoldo/workspaceC/fretsonfire/build/CMakeFiles  1 2 3
->>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 	@echo "Built target FireDoorEscaper"
 .PHONY : CMakeFiles/FireDoorEscaper.dir/all
 
@@ -78,17 +69,9 @@ all: CMakeFiles/FireDoorEscaper.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/FireDoorEscaper.dir/rule: cmake_check_build_system
-<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/antonio/git/firedoorescaper/build/CMakeFiles 3
-=======
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/leopoldo/workspaceC/fretsonfire/build/CMakeFiles 3
->>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/FireDoorEscaper.dir/all
-<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/antonio/git/firedoorescaper/build/CMakeFiles 0
-=======
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/leopoldo/workspaceC/fretsonfire/build/CMakeFiles 0
->>>>>>> branch 'master' of https://github.com/Lesbinary/firedoorescaper.git
 .PHONY : CMakeFiles/FireDoorEscaper.dir/rule
 
 # Convenience name for target.

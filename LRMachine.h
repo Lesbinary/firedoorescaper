@@ -27,11 +27,21 @@ public:
 private:
 	std::vector<Sample> trainingSet;
 	int classifySuccesses;
+	int nFeatures;
+	double X[1000][100];
+	double y[1000];
+	double theta[1000];
 
 	// Internal functions
 	double sigmoid(double z);
 	double cost(double tetha[], int sizeT, double X[][100], double y[], int sizeY);
 	void grad(double tetha[], int sizeT, double X[][100], double y[], int sizeY, double grad[]);
+	void trainByGradient(int iter, double alpha);
+
+	// Auxiliar functions
+	void fillX(double X[][100]);
+	void fillTheta(double theta[]);
+	void fillY(double y[]);
 
 
 
