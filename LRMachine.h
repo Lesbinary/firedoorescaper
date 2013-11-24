@@ -31,6 +31,8 @@ private:
 	double X[100000][100];
 	double y[100000];
 	double theta[100000];
+	int iterTrain;
+	double alphaTrain;
 
 	// Internal functions
 	double sigmoid(double z);

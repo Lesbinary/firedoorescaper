@@ -61,9 +61,8 @@ main(void) {
     // Create a new game starting at level 0, and staying at the same level all the time.
     // Use GDM_LEVELUP for increasing level of difficulty
 	GodMachine machine;
-    CGame *game = new CGame(0);
+    CGame *game = new CGame(2);
     game->setGameDifficultyMode(CGame::GDM_SAMELEVEL);
-
 
 
     // Main loop: stay will the game is on (i.e. the player is alive)

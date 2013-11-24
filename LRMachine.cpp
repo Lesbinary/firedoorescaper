@@ -9,8 +9,10 @@
 
 LRMachine::LRMachine() {
 	// TODO Auto-generated constructor stub
-	nFeatures = 1;
+	nFeatures = 4;
 	classifySuccesses = 0;
+	iterTrain = 1000;
+	alphaTrain = 0.001;
 }
 
 LRMachine::~LRMachine() {
@@ -22,32 +24,17 @@ void LRMachine::addTrainingSample(Sample sample) {
 }
 
 bool LRMachine::isTrainingReady() {
-	if(trainingSet.size() > 5 ){
-		trainByGradient(1000, 0.00001);
+	if(trainingSet.size() > 500 ){
+		trainByGradient(iterTrain, alphaTrain);
 		return true;
 	} else return false;
 }
 
 bool LRMachine::isReadyToCross() {
-	return classifySuccesses > 50;
+	return classifySuccesses > 10;
 }
 
 void LRMachine::classifySample(Sample sample) {
-//	double X[3][100];
-//	for(int i=0; i<3; i++)
-//		for(int j=0; j<3; j++)
-//			X[i][j]=i+j;
-//	double theta[3] = { 0, 0, 0 };
-//	double Y[3] = { 1, 2, 3};
-//	double coste = cost(theta, 3, X, Y, 3);
-//	std::cout << "El coste es de: " << coste << std::endl;
-//	std::cout << "Y el gradiente es: ";
-//	double gradiente[3];
-//	grad(theta, 3, X, Y, 3, gradiente);
-//	for(int i=0; i<3; i++)
-//		std::cout << gradiente[i] << " ";
-//	std::cout << std::endl;
-
 	// Como tengo un sigmoide, con un threshold voy to cheto
 	double p = 0.0;
 	for(int i=0; i<nFeatures+1; i++){
@@ -68,9 +55,10 @@ void LRMachine::classifySample(Sample sample) {
 		else std::cout << "Predigo que la puerta está apagada" << std::endl;
 		std::cout << "Pinyico... volviendo a entrenar" << std::endl;
 		this->trainingSet.push_back(sample);
-		this->trainByGradient(1000, 0.000001);
+		this->trainByGradient(iterTrain, alphaTrain);
 		this->classifySuccesses--;
 	} else std::cout << "No se que carajo ha pasado" << std::endl;
+	std::cout << "He clasificado correctamente " << classifySuccesses << std::endl;
 
 }
 
@@ -82,7 +70,9 @@ bool LRMachine::isDoorOnFire(double input[]) {
 		else p += theta[i]*input[i-1];
 	}
 	p=sigmoid(p);
-	std::cout << "La probabilidad de que la puerta con valor: " << input[0] << " es: " << p << std::endl;
+	std::cout << "La probabilidad de que la puerta esté caliente es: " << p << std::endl;
+	if(p>0.4 && p <0.6)
+		return true; // Esto es un truquillo para no jugarsela en un rango de más indecisión
 	if(p>0.5)
 		return true;
 	else return false;
@@ -142,7 +132,7 @@ void LRMachine::trainByGradient(int iter, double alpha) {
 	for(int k=0; k<iter; k++){
 		// Calculo el coste
 		double coste = cost(theta, nFeatures+1, X, y, trainingSet.size());
-//		std::cout << "Para esta iteración el coste es: " << coste << std::endl;
+//		std::cout << "Para la iteración " << k << " el coste es: " << coste << std::endl;
 		// Recalculo theta para la siguiente iteracion
 		grad(theta, nFeatures+1, X, y, trainingSet.size(), gradiente);
 //		std::cout << "El nuevo theta para la it " << k << " es: ";
@@ -151,10 +141,13 @@ void LRMachine::trainByGradient(int iter, double alpha) {
 //			std::cout << theta[i]-alpha*gradiente[i] << " (" << alpha*gradiente[i] << ") ";
 		}
 //		std::cout << std::endl;
-//		std::cout << "La variación en el coste es de: " << coste-pCoste << std::endl;
-		if(coste-pCoste < 0.0001){
-//			std::cout << "Estoy suficientemente entrenado!!!!!!\n";
-//			break;
+		vari = std::abs(coste-pCoste);
+//		std::cout << "La variación en el coste para la iteración "<< k <<" es de: " << vari << std::endl;
+		if(vari < 0.0001 && !(std::isnan(vari))){ // Truquillo porque a veces es nan
+			std::cout << "Estoy suficientemente entrenado!!!!!!\n";
+			break;
+		} else if (std::isnan(vari)){
+//			std::cout << "Tengo un NaN!!!!\n";
 		}
 		pCoste = coste;
 	}
