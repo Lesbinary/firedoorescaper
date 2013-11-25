@@ -24,7 +24,7 @@ void LRMachine::addTrainingSample(Sample sample) {
 }
 
 bool LRMachine::isTrainingReady() {
-	if(trainingSet.size() > 500 ){
+	if(trainingSet.size() > 50 ){
 		trainByGradient(iterTrain, alphaTrain);
 		return true;
 	} else return false;

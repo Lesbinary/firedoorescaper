@@ -23,17 +23,22 @@ public:
   inline unsigned     getDimension() const;
   inline const TVecDoubles& getNextStepInputs() const;
   void                doNextFireStep();
+
+  TVecDoubles m_weights;    //< Weights of the Door Model
+
 private:
   bool        m_onFire;     //< True if the door is on fire
   EModel      m_model;      //< Selects the model of input interpretation of the Door
   unsigned    m_steps;      //< Steps played with this firedoor
   unsigned    m_dimension;  //< Dimension of the weight space
+  double      m_rangei;     //< Input range for current door
   TVecDoubles m_nextInputs; //< Next inputs to the Door
-  TVecDoubles m_weights;    //< Weights of the Door Model
 
   explicit    CFireDoor(unsigned dim);
   inline void setModel(EModel m);
   void        initialize();
+  void        createNewPattern();
+  bool        validatePattern(double threshold, unsigned n=100);
 };
 
 ////

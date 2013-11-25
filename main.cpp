@@ -14,7 +14,7 @@ using namespace FireDoorEscaper;
 //Medios
 // - Regresión logística
 // - Redes neuronales
-//     - Feed-Forward ( Backpropagation)
+//     - Feed-Forward (Backpropagation)
 //     - Recurrentes / Generales (Genéticos u otros) <- Medio-difícil
 
 //Difíciles

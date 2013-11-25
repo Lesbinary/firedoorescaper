@@ -19,13 +19,10 @@ CFireDoor::CFireDoor(unsigned dim)
 ////////////////////////////////////////////////////////////
 void
 CFireDoor::initialize() {
-  m_weights.clear();
   m_nextInputs.clear();
   m_onFire = false;
-  double rangei = CRNDGEN.uniformRandomDouble(10, 10000);
-  double rangew = CRNDGEN.uniformRandomDouble(rangei/500, rangei/50);
-  CRNDGEN.uniformRandomDoubleVector(m_weights,  m_dimension+1, -rangew, rangew);
-  CRNDGEN.uniformRandomDoubleVector(m_nextInputs, m_dimension, -rangei, rangei);
+  do createNewPattern(); while (!validatePattern(0.4));
+  //CRNDGEN.uniformRandomDoubleVector(m_nextInputs, m_dimension, -m_rangei, m_rangei);
 }
 
 ////////////////////////////////////////////////////////////
@@ -48,10 +45,46 @@ CFireDoor::doNextFireStep() {
 
   // Create a new set of random inputs for the next step
   m_nextInputs.clear();
-  CRNDGEN.uniformRandomDoubleVector(m_nextInputs, m_dimension, -100.0, 100.0);
+  CRNDGEN.uniformRandomDoubleVector(m_nextInputs, m_dimension, -m_rangei, m_rangei);
 
   // Update steps
   m_steps++;
+}
+
+////////////////////////////////////////////////////////////
+/// \brief Creates a new pattern of weights for the door.
+////////////////////////////////////////////////////////////
+void
+CFireDoor::createNewPattern() {
+    m_weights.clear();
+    m_rangei = CRNDGEN.uniformRandomDouble(10, 10000);
+    double rangew = m_rangei / 10; //CRNDGEN.uniformRandomDouble(m_rangei/10, m_rangei/2);
+    CRNDGEN.uniformRandomDoubleVector(m_weights,  m_dimension+1, -rangew, rangew);
+    //m_weights[m_weights.size()-1] *= 0.1;
+}
+
+////////////////////////////////////////////////////////////
+/// \brief Validates the new pattern of weights
+/// It checks the proportion of nofire events for the
+/// actual fire pattern of the door and validates it if
+/// the proportion is above the threshold.
+/// \param threshold 0-1 minimum acceptable proportion of nofire events
+/// \param n             number of samples to test
+/// \returns true if the proportion is above threshold
+////////////////////////////////////////////////////////////
+bool
+CFireDoor::validatePattern(double threshold, unsigned n) {
+    // Count nofire events in n samples
+    unsigned nofire = 0;
+    for (unsigned i=0; i < n; i++) {
+        doNextFireStep();
+        if (!m_onFire) nofire++;
+    }
+    // Restore used steps
+    m_steps -= n;
+
+    // Return if nofire events proportion is above threshold
+    return ( (double(nofire) / double(n)) > threshold );
 }
 
 }
