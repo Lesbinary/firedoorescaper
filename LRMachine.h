@@ -28,22 +28,23 @@ private:
 	std::vector<Sample> trainingSet;
 	int classifySuccesses;
 	int nFeatures;
-	double X[100000][100];
-	double y[100000];
-	double theta[100000];
+	std::vector<std::vector<double> > X;
+	std::vector<double> y;
+	std::vector<double> theta;
 	int iterTrain;
 	double alphaTrain;
 
 	// Internal functions
 	double sigmoid(double z);
-	double cost(double tetha[], int sizeT, double X[][100], double y[], int sizeY);
-	void grad(double tetha[], int sizeT, double X[][100], double y[], int sizeY, double grad[]);
+	double cost(std::vector<double> theta, std::vector<std::vector<double> > X, std::vector<double> y);
+	void grad(std::vector<double> tetha, std::vector<std::vector<double> > X, std::vector<double> y, std::vector<double> grad);
 	void trainByGradient(int iter, double alpha);
+	void trainByNormalEcuation();
 
 	// Auxiliar functions
-	void fillX(double X[][100]);
-	void fillTheta(double theta[]);
-	void fillY(double y[]);
+	void fillX();
+	void fillTheta();
+	void fillY();
 
 
 

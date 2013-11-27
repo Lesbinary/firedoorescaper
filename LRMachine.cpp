@@ -6,6 +6,7 @@
  */
 
 #include "LRMachine.h"
+#include "armadillo"
 
 LRMachine::LRMachine() {
 	// TODO Auto-generated constructor stub
@@ -24,8 +25,12 @@ void LRMachine::addTrainingSample(Sample sample) {
 }
 
 bool LRMachine::isTrainingReady() {
-	if(trainingSet.size() > 50 ){
-		trainByGradient(iterTrain, alphaTrain);
+	if(trainingSet.size() == 1){
+		nFeatures=trainingSet[0].getNFeatures();
+	}
+	if(trainingSet.size() > 20 ){
+//		trainByGradient(iterTrain, alphaTrain);
+		trainByNormalEcuation();
 		return true;
 	} else return false;
 }
@@ -55,7 +60,8 @@ void LRMachine::classifySample(Sample sample) {
 		else std::cout << "Predigo que la puerta está apagada" << std::endl;
 		std::cout << "Pinyico... volviendo a entrenar" << std::endl;
 		this->trainingSet.push_back(sample);
-		this->trainByGradient(iterTrain, alphaTrain);
+//		this->trainByGradient(iterTrain, alphaTrain);
+		this->trainByNormalEcuation();
 		this->classifySuccesses--;
 	} else std::cout << "No se que carajo ha pasado" << std::endl;
 	std::cout << "He clasificado correctamente " << classifySuccesses << std::endl;
@@ -88,73 +94,101 @@ double LRMachine::sigmoid(double z) {
 	return 1/(1+pow(e,-z));
 }
 
-double LRMachine::cost(double theta[], int sizeT, double X[][100],
-		double y[], int sizeY) {
+double LRMachine::cost(std::vector<double> theta, std::vector<std::vector<double> > X, std::vector<double> y) {
 	double J = 0.0;
-	for(int i=0; i<sizeY; i++){
+	for(int i=0; i<y.size(); i++){
 		// Calculo el valor de la hipótises para la theta dada
 		double h = 0.0;
-		for(int j=0; j<sizeT; j++){
+		for(int j=0; j<theta.size(); j++){
 			h += theta[j]*X[i][j];
 		}
 		h = sigmoid(h);
 		// Calculo el valor del coste para la theta dada
 		J+=(-y[i]*std::log(h))-((1-y[i])*std::log(1-h));
 	}
-	return J/sizeY;
+	return J/y.size();
 }
 
-void LRMachine::grad(double theta[], int sizeT, double X[][100], double y[],
-		int sizeY, double grad[]) {
-	for(int j=0; j<sizeT; j++){
+void LRMachine::grad(std::vector<double> tetha, std::vector<std::vector<double> > X, std::vector<double> y, std::vector<double> grad) {
+	for(int j=0; j<theta.size(); j++){
 		double parcial = 0.0;
-		for(int i=0; i<sizeY; i++){
+		for(int i=0; i<y.size(); i++){
 			// Calculo el valor de la hipótises para la theta dada
 			double h = 0.0;
-			for(int k=0; k<sizeT; k++){
+			for(int k=0; k<theta.size(); k++){
 				h += theta[k]*X[i][k];
 			}
 			h = sigmoid(h);
 			parcial += (h-y[i])*X[i][j];
 		}
-		grad[j] = parcial/sizeY;
+		grad[j] = parcial/theta.size();
 	}
 }
 
 void LRMachine::trainByGradient(int iter, double alpha) {
 	double vari = 0.01;
 	double pCoste = 0.0;
-	double gradiente[nFeatures+1];
-	fillX(X);
-	fillTheta(theta);
-	fillY(y);
+	std::vector<double> gradiente;
+	fillX();
+	fillTheta();
+	fillY();
 
 	for(int k=0; k<iter; k++){
 		// Calculo el coste
-		double coste = cost(theta, nFeatures+1, X, y, trainingSet.size());
-//		std::cout << "Para la iteración " << k << " el coste es: " << coste << std::endl;
+		double coste = cost(theta, X, y);
+		std::cout << "Para la iteración " << k << " el coste es: " << coste << std::endl;
 		// Recalculo theta para la siguiente iteracion
-		grad(theta, nFeatures+1, X, y, trainingSet.size(), gradiente);
+		grad(theta, X, y, gradiente);
 //		std::cout << "El nuevo theta para la it " << k << " es: ";
-		for(int i=0; i<nFeatures+1; i++){
+		for(int i=0; i<theta.size(); i++){
 			theta[i]=theta[i]-alpha*gradiente[i];
 //			std::cout << theta[i]-alpha*gradiente[i] << " (" << alpha*gradiente[i] << ") ";
 		}
 //		std::cout << std::endl;
 		vari = std::abs(coste-pCoste);
-//		std::cout << "La variación en el coste para la iteración "<< k <<" es de: " << vari << std::endl;
-		if(vari < 0.0001 && !(std::isnan(vari))){ // Truquillo porque a veces es nan
+		std::cout << "La variación en el coste para la iteración "<< k <<" es de: " << vari << std::endl;
+		if(vari < 0.0001 && !std::isnan(vari)){ // Truquillo porque a veces es nan
 			std::cout << "Estoy suficientemente entrenado!!!!!!\n";
 			break;
 		} else if (std::isnan(vari)){
-//			std::cout << "Tengo un NaN!!!!\n";
+			std::cout << "Tengo un NaN!!!!\n";
 		}
 		pCoste = coste;
 	}
 
 }
 
-void LRMachine::fillX(double X[][100]) {
+void LRMachine::trainByNormalEcuation() {
+	// Obtengo la X
+	arma::mat X = arma::mat(trainingSet.size(), nFeatures+1);
+	for(int i=0; i<trainingSet.size(); i++){
+		for(int j=0; j<nFeatures+1; j++){
+			if(j==0)
+				X(i,j)=1.0;
+			else X(i,j)=trainingSet[i].input[j-1];
+		}
+	}
+	// Obtengo la Y
+	arma::mat y = arma::mat(trainingSet.size(), 1);
+	for(int i=0; i<trainingSet.size(); i++){
+		for(int i=0; i<trainingSet.size(); i++){
+			if(trainingSet[i].burn)
+				y(i)=1;
+			else y(i)=0;
+		}
+	}
+	// Inicializo theta
+	arma::mat theta = arma::mat(nFeatures+1, 1);
+	// Calculo vectorialmente
+	theta = arma::pinv(X.t()*X)*X.t()*y;
+
+	this->theta.clear();
+	for(int i=0; i<nFeatures+1; i++){
+		this->theta.push_back(theta(i));
+	}
+}
+
+void LRMachine::fillX() {
 	for(int i=0; i<trainingSet.size(); i++){
 		for(int j=0; j<nFeatures+1; j++){
 			if(j==0)
@@ -164,12 +198,12 @@ void LRMachine::fillX(double X[][100]) {
 	}
 }
 
-void LRMachine::fillTheta(double theta[]) {
+void LRMachine::fillTheta() {
 	for(int i=0; i<nFeatures+1; i++)
 		theta[i]=0;
 }
 
-void LRMachine::fillY(double y[]) {
+void LRMachine::fillY() {
 	for(int i=0; i<trainingSet.size(); i++){
 		if(trainingSet[i].burn)
 			y[i]=1;
