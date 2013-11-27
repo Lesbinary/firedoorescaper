@@ -15,6 +15,7 @@
 class LRMachine : public IMachine {
 public:
 	LRMachine();
+
 	virtual ~LRMachine();
 
 	void addTrainingSample(Sample sample);
@@ -23,6 +24,7 @@ public:
 	void classifySample(Sample sample);
 	bool isDoorOnFire(double input[]);
 	void clearTrainingSet();
+	void pedirParametros();
 
 private:
 	std::vector<Sample> trainingSet;
@@ -33,6 +35,7 @@ private:
 	std::vector<double> theta;
 	int iterTrain;
 	double alphaTrain;
+	int trainType;
 
 	// Internal functions
 	double sigmoid(double z);

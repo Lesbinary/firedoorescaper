@@ -14,8 +14,9 @@
 #include "IMachine.h"
 #include "KVMachine.h"
 #include "LRMachine.h"
+#include "NNMachine.h"
 
-enum Machine {LogisticRegresion, KVecinos};
+enum Machine {LogisticRegresion, KVecinos, neuralNetwork};
 
 class GodMachine {
 public:
@@ -29,10 +30,14 @@ public:
 				break;
 			case KVecinos: machine=new KVMachine();
 				break;
+			case neuralNetwork: machine = new NNMachine();
 		}
 	}
 
 	virtual ~GodMachine(){}
+	void pedirParametros(){
+		machine->pedirParametros();
+	}
 	void addTrainingSample(Sample sample){
 		machine->addTrainingSample(sample);
 	}

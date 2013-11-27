@@ -14,12 +14,32 @@ LRMachine::LRMachine() {
 	classifySuccesses = 0;
 	iterTrain = 1000;
 	alphaTrain = 0.001;
+	trainType = 1; //1 normal, 2 gradiente
 }
+
 
 LRMachine::~LRMachine() {
 	// TODO Auto-generated destructor stub
 }
 
+
+void LRMachine::pedirParametros(){
+
+	std::cout << "1.Normal" << std::endl;
+	std::cout << "2.Descenso por gradiente" << std::endl;
+	std::cout << "Elige el modo de calculo del error: ";
+	std::cin >> trainType;
+
+	system("cls");
+	if(trainType == 2){
+		std::cout << "Introduce el valor de alpha: ";
+		std::cin >> alphaTrain;
+		system("cls");
+		std::cout << "Introduce el numero de iteraciones: ";
+		std::cin >> iterTrain;
+		system("cls");
+	 }
+}
 void LRMachine::addTrainingSample(Sample sample) {
 	trainingSet.push_back(sample);
 }
@@ -29,8 +49,8 @@ bool LRMachine::isTrainingReady() {
 		nFeatures=trainingSet[0].getNFeatures();
 	}
 	if(trainingSet.size() > 20 ){
-//		trainByGradient(iterTrain, alphaTrain);
-		trainByNormalEcuation();
+		if(trainType == 2)trainByGradient(iterTrain, alphaTrain);
+		else trainByNormalEcuation();
 		return true;
 	} else return false;
 }
@@ -60,8 +80,8 @@ void LRMachine::classifySample(Sample sample) {
 		else std::cout << "Predigo que la puerta está apagada" << std::endl;
 		std::cout << "Pinyico... volviendo a entrenar" << std::endl;
 		this->trainingSet.push_back(sample);
-//		this->trainByGradient(iterTrain, alphaTrain);
-		this->trainByNormalEcuation();
+		if(trainType == 2)this->trainByGradient(iterTrain, alphaTrain);
+		else this->trainByNormalEcuation();
 		this->classifySuccesses--;
 	} else std::cout << "No se que carajo ha pasado" << std::endl;
 	std::cout << "He clasificado correctamente " << classifySuccesses << std::endl;

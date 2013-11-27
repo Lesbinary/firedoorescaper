@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 
+
 using namespace FireDoorEscaper;
 
 //TODO: Métodos de clasificación a implementar
@@ -65,6 +66,14 @@ main(int argvc, char *argv[]) {
     CGame *game;
     int minDoorsToNextLevel = 50; // Esto también se debería de pasar por parámetro o algo
 
+
+	 int nivelDeJuego;
+	 int maquinaElegida;
+	 double lambda;
+
+
+
+
     // Obtengo parametros e inicializo
     if(argvc > 1){ // Para una ejecución rápida... más o menos: firebitch initLevel machine [los parámetros que puedan requerir cada máquina]
     	int level = atoi(argv[1]); // Nivel inicial del juego
@@ -76,6 +85,7 @@ main(int argvc, char *argv[]) {
     		break;
     	case 1: // Logistic regression
     		machine = new GodMachine(LogisticRegresion);
+
     		break;
     	default: // Por defecto
     		machine = new GodMachine(LogisticRegresion);
@@ -83,9 +93,46 @@ main(int argvc, char *argv[]) {
     	}
 
     } else{ // Aquí lo ideal sería es que si no se pasan parámetros se inicien parámetros por defecto y salga un menú con las opciones
-    	machine = new GodMachine(LogisticRegresion);
-    	game = new CGame(2);
+
+
+    	 std::cout << "Seleccionar el nivel inicial del juego(0-9): ";
+    	 std::cin >> nivelDeJuego;
+
+    	 game = new CGame(nivelDeJuego);
+
+    	 system("cls");
+
+    	 std::cout << "1.KVecinos " << std::endl;
+    	 std::cout << "2.LogisticRegresion " << std::endl;
+    	 std::cout << "3.Neural network " << std::endl;
+    	 std::cout << "4.Support vector machines " << std::endl;
+    	 std::cout << "Selecciona la maquina: ";
+    	 std::cin >> maquinaElegida;
+
+    	 system("cls");
+
+    	 std::cout << "Introduce el lambda: ";
+    	 std::cin >> lambda; //es un double?
+
+    	 system("cls");
+
+    	switch(maquinaElegida){
+    	case 1: // KVecinos
+    		machine = new GodMachine(KVecinos);
+    	break;
+    	case 2: //LogisticRegresion
+    		machine = new GodMachine(LogisticRegresion);
+    		machine->pedirParametros();
+    	break;
+    	case 3: // Neural network
+        	machine = new GodMachine(neuralNetwork);
+        	machine->pedirParametros();
+    	break;
+    	case 4: //Support vector machines
+    		std::cout << "Tico tico tico tico tico tico tico tico tico";
+    	break;
     }
+
     game->setGameDifficultyMode(CGame::GDM_SAMELEVEL);
     // Main loop: stay will the game is on (i.e. the player is alive)
     std::cout << "Empezamos el juego: " << std::endl;
