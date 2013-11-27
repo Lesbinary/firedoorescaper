@@ -3,6 +3,10 @@
 ##Ejercicio de prueba para la práctica 2 de Razonamiento Automático (2013/2014)
 
 
+Paquetes necesarios:
+
+sudo apt-get install libarmadillo-dev libboost-random1.48-dev
+
 
 Para compilar esto hace falta:
 
