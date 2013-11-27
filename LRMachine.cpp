@@ -60,7 +60,6 @@ void LRMachine::classifySample(Sample sample) {
 		else std::cout << "Predigo que la puerta está apagada" << std::endl;
 		std::cout << "Pinyico... volviendo a entrenar" << std::endl;
 		this->trainingSet.push_back(sample);
-//		this->trainByGradient(iterTrain, alphaTrain);
 		this->trainByNormalEcuation();
 		this->classifySuccesses--;
 	} else std::cout << "No se que carajo ha pasado" << std::endl;
