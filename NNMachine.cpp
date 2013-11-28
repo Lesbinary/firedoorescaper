@@ -83,7 +83,6 @@ void NNMachine::backPropagation(){
 			//Esto ya se hace con armadillo, i need consulting, así que paro ya por hoy
 
 		//Cálculo de upperDelta
-
 	}
 }
 

@@ -44,7 +44,7 @@ public:
 		std::vector<std::vector<double> > a; //En esta matriz se almacenarán los valores calculados de las diferentes capas ocultas (en el ejemplo, 1)
 		std::vector<double> outputLayer; //tamaño variable, en nuestro problema sera 1 solo
 
-		//Deberemos tener un esquema pensado para la red, con un nº X de nodos en la hidden layer
+	//Deberemos tener un esquema pensado para la red, con un nº X de nodos en la hidden layer
 
 	//Variables para las ecuaciones
 		std::vector<std::vector<double> > y;
