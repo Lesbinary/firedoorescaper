@@ -28,16 +28,38 @@ public:
 	void pedirParametros();
 
 	private:
-		std::vector<Sample> trainingSet;
-		int classifySuccesses;
 		int nFeatures;
-		std::vector<std::vector<double> > X;
-		std::vector<double> y;
-		std::vector<double> theta;
-		int iterTrain;
-		double alphaTrain;
-		int trainType;
+		int trainType; //Que de momento siempre sera 1
 
+	//Esto es pa aclararme yo
+		int L; //numero de capas de la red
+		std::vector<int> s_l; //número de nodos por capa
+		int classifySuccesses;
+
+	//Variables
+
+		std::vector<Sample> trainingSet; //tamaño variable para el número de entradas
+		std::vector<double> inputLayer;
+		std::vector<std::vector<std::vector<double> > > thetas; //Una matriz para cada hidden layer. Mínimo 2
+		std::vector<std::vector<double> > a; //En esta matriz se almacenarán los valores calculados de las diferentes capas ocultas (en el ejemplo, 1)
+		std::vector<double> outputLayer; //tamaño variable, en nuestro problema sera 1 solo
+
+		//Deberemos tener un esquema pensado para la red, con un nº X de nodos en la hidden layer
+
+	//Variables para las ecuaciones
+		std::vector<std::vector<double> > y;
+		std::vector<std::vector<double> > X;
+
+	//Estas variables sirven para inicializar los vectores (después usaremos el size())
+		int inputLayerSize;
+		int hiddenLayerSize;
+		int outputLayerSize;
+
+		void backPropagation();
+		void forwardPropagation(std::vector<double> x, std::vector<double> a, std::vector<std::vector<double> > theta);
+		double cost(std::vector<double> h, std::vector<std::vector<double> > theta, std::vector<std::vector<double> > X, std::vector<std::vector<double> > y);
+		double sigmoid(double z);
+		void train();
 };
 
 #endif /* NNMACHINE_H_ */
