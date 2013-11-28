@@ -131,6 +131,7 @@ main(int argvc, char *argv[]) {
     	case 4: //Support vector machines
     		std::cout << "Tico tico tico tico tico tico tico tico tico";
     	break;
+    	}
     }
 
     game->setGameDifficultyMode(CGame::GDM_SAMELEVEL);

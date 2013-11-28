@@ -27,14 +27,14 @@ void NNMachine::pedirParametros() {
 	std::cout << "Elige el modo de calculo del error: ";
 	std::cin >> trainType;
 
-	system("cls");
+	system("clear");
 	if(trainType == 2){
 		std::cout << "Introduce el valor de alpha: ";
 		std::cin >> alphaTrain;
-		system("cls");
+		system("clear");
 		std::cout << "Introduce el numero de iteraciones: ";
 		std::cin >> iterTrain;
-		system("cls");
+		system("clear");
 	 }
 }
 

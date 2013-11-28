@@ -61,3 +61,6 @@ void KVMachine::clearTrainingSet() {
 	trainingSet.clear();
 	classifySuccesses = 0;
 }
+
+void KVMachine::pedirParametros() {
+}

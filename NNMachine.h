@@ -11,6 +11,8 @@
 #include "IMachine.h"
 #include <cmath>
 #include <iostream>
+#include <vector>
+#include <cstdlib>
 
 class NNMachine : public IMachine {
 public:
@@ -18,12 +20,12 @@ public:
 	virtual ~NNMachine();
 
 	void addTrainingSample(Sample sample);
-		bool isTrainingReady();
-		bool isReadyToCross();
-		void classifySample(Sample sample);
-		bool isDoorOnFire(double input[]);
-		void clearTrainingSet();
-		void pedirParametros();
+	bool isTrainingReady();
+	bool isReadyToCross();
+	void classifySample(Sample sample);
+	bool isDoorOnFire(double input[]);
+	void clearTrainingSet();
+	void pedirParametros();
 
 	private:
 		std::vector<Sample> trainingSet;

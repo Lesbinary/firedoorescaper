@@ -24,6 +24,7 @@ public:
 	void classifySample(Sample sample);
 	bool isDoorOnFire(double input[]);
 	void clearTrainingSet();
+	void pedirParametros();
 
 private:
 	std::vector<Sample> trainingSet;

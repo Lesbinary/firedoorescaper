@@ -5,7 +5,7 @@ LIB_DIR=lib/
 MAINFILE=main
 OBJFILE=firebitch
 LIBS=-lFireDoorEscaper -lboost_random -larmadillo
-MORE_INCLUDES= KVMachine.cpp LRMachine.cpp 
+MORE_INCLUDES= KVMachine.cpp LRMachine.cpp NNMachine.cpp
 
 all: $(MAINFILE) 
 
