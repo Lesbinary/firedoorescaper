@@ -54,16 +54,12 @@ void NNMachine::clearTrainingSet() {
 void NNMachine::backPropagation(){
 	//Con un trainingSet dado
 
-	std::vector<std::vector<std::vector<double> > > upperDelta;
 	std::vector<std::vector<double> > lowerDelta;
+	std::vector<double> upperDelta;
 
 	//Inicialización de upperDelta
-	for(int l = 0; l < this->thetas.size(); l++){
-		for (int i = 0; i < this->thetas[0].size(); i++){
-			for(int j = 0; j < this->thetas[0][0].size(); j++){
-				upperDelta[l][i][j] = 0.0;
-			}
-		}
+	for(int l = 0; l < L; l++){
+		upperDelta[l] = 0.0;
 	}
 
 	for(int i = 0; i < this->nFeatures; i++){
@@ -80,9 +76,54 @@ void NNMachine::backPropagation(){
 		}
 
 		//Cómputo de los demás lowerDelta^(l)
-			//Esto ya se hace con armadillo, i need consulting, así que paro ya por hoy
+		for(int l = L-2; l >=0; l--){//De atras adelante, por capas
+			for(int j = 0; j < thetas[l].size(); j++){//De adelante atras, por niveles
+				for(int k = 0; k < thetas[l][j].size(); k++){//todas las thetas
+					lowerDelta[l][j] += thetas[l][j][k]*lowerDelta[l+1][k];//puede que me haya liado con los índices
+				}
+			}
+		}
 
 		//Cálculo de upperDelta
+		for(int j = lowerDelta.size()-1; j >=0; j--){
+			for(int k = 0; k < lowerDelta[j].size(); k++){
+				upperDelta[j] += a[j][k]*lowerDelta[j+1][j];
+			}
+		}
+
+		std::vector<double> D;
+
+		//Cálculo de la D
+		for(int j = 0; j < lowerDelta.size(); j++){
+			D[j] = upperDelta[j]/this->y.size();
+		}
+
+		//Ahora empezamos con el gradient check, una vez tenemos las D
+
+		//Convertimos D en un vector
+
+		//Calculamos el gradApprox
+
+		double epsilon = 0.001;
+
+		for(int l = 0; l < this->thetas.size(); l++){
+			for(int j = 0; j < this->thetas[l].size(); j++){
+				for(int k = 0; k < this->thetas[l][j].size(); k++){
+					std::vector<std::vector<std::vector<double> > > thetasPlus(this->thetas);
+					std::vector<std::vector<std::vector<double> > > thetasMinus(this->thetas);
+
+					thetasPlus[l][j][k] += epsilon;
+					thetasMinus[l][j][k] -= epsilon;
+
+					//y ahora la funcion de costWHAT
+					std::vector<std::vector<double> > as;
+
+					//cost(as,thetasPlus,trainingSet[i].input,)
+				}
+			}
+		}
+
+
 	}
 }
 
@@ -98,7 +139,7 @@ void NNMachine::forwardPropagation(std::vector<double> x, std::vector<double> a,
 }
 
 //A falta de testear
-double NNMachine::cost(std::vector<double> h, std::vector<std::vector<double> > theta, std::vector<std::vector<double> > X, std::vector<std::vector<double> > y) {
+double NNMachine::cost(std::vector<std::vector<double> > a, std::vector<std::vector<std::vector<double> > > thetas, std::vector<double> X, std::vector<double> y) {
 	//Voy a hacer la ecuación tal cual está en las Lectures y las diapositivas de Andrew, no en los ejercicios
 
 	//y es el vector de doubles procedentes de booleanos, que almacena si las puertas arden o no
@@ -111,13 +152,19 @@ double NNMachine::cost(std::vector<double> h, std::vector<std::vector<double> > 
 	//La "K" de la ecuación sería y[i].size()
 
 	double J = 0.0;
+	/*
+	a[0] = X;
+
+	for(int l = 1; l < this->thetas.size()-1; l++){
+		forwardPropagation(a[l-1],a[l],thetas[l-1]);
+	}
 
 	for(int i=0; i<y[0].size(); i++){
 		for(int k = 0; k < y.size(); k++){
 			J += (y[i][k]*std::log(h[k]))+((1-y[i][k])*log(1-h[k]));
 		}
 	}
-
+	*/
 	return -J/y.size();
 }
 

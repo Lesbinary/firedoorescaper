@@ -57,7 +57,7 @@ public:
 
 		void backPropagation();
 		void forwardPropagation(std::vector<double> x, std::vector<double> a, std::vector<std::vector<double> > theta);
-		double cost(std::vector<double> h, std::vector<std::vector<double> > theta, std::vector<std::vector<double> > X, std::vector<std::vector<double> > y);
+		double cost(std::vector<std::vector<double> > a, std::vector<std::vector<std::vector<double> > > thetas, std::vector<double> X, std::vector<double> y);
 		double sigmoid(double z);
 		void train();
 };
