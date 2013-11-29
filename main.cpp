@@ -64,7 +64,7 @@ main(int argvc, char *argv[]) {
     // Use GDM_LEVELUP for increasing level of difficulty
 	GodMachine *machine;
     CGame *game;
-    int minDoorsToNextLevel = 50; // Esto también se debería de pasar por parámetro o algo
+    int minDoorsToNextLevel = 100; // Esto también se debería de pasar por parámetro o algo
 
 
 	 int nivelDeJuego;

@@ -43,6 +43,7 @@ private:
 	void grad(std::vector<double> tetha, std::vector<std::vector<double> > X, std::vector<double> y, std::vector<double> grad);
 	void trainByGradient(int iter, double alpha);
 	void trainByNormalEcuation();
+	void upgradeParameters();
 
 	// Auxiliar functions
 	void fillX();

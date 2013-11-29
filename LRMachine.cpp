@@ -13,7 +13,7 @@ LRMachine::LRMachine() {
 	nFeatures = 4;
 	classifySuccesses = 0;
 	iterTrain = 1000;
-	alphaTrain = 0.001;
+	alphaTrain = 0.01;
 	trainType = 1; //1 normal, 2 gradiente
 }
 
@@ -70,14 +70,14 @@ void LRMachine::classifySample(Sample sample) {
 	p=sigmoid(p);
 	if((p>0.5 && sample.burn) || (p<=0.5 && !sample.burn)){
 		if(p>0.5)
-			std::cout << "Predigo que la puerta está encendida" << std::endl;
-		else std::cout << "Predigo que la puerta está apagada" << std::endl;
+			std::cout << "Predigo que la siguiente puerta está encendida" << std::endl;
+		else std::cout << "Predigo que la siguiente puerta está apagada" << std::endl;
 		std::cout << "Ha clasificao de puta madre" << std::endl;
 		this->classifySuccesses++;
 	} else if ((p<=0.5 && sample.burn) || (p>0.5 && !sample.burn)){
 		if(p>0.5)
-			std::cout << "Predigo que la puerta está encendida" << std::endl;
-		else std::cout << "Predigo que la puerta está apagada" << std::endl;
+			std::cout << "Predigo que la siguiente puerta está encendida" << std::endl;
+		else std::cout << "Predigo que la siguiente puerta está apagada" << std::endl;
 		std::cout << "Pinyico... volviendo a entrenar" << std::endl;
 		this->trainingSet.push_back(sample);
 		if(trainType == 2)this->trainByGradient(iterTrain, alphaTrain);
@@ -96,11 +96,12 @@ bool LRMachine::isDoorOnFire(double input[]) {
 		else p += theta[i]*input[i-1];
 	}
 	p=sigmoid(p);
-	std::cout << "La probabilidad de que la puerta esté caliente es: " << p << std::endl;
-	if(p>0.4 && p <0.6)
+	std::cout << "La probabilidad de que la siguiente puerta esté caliente es: " << p << std::endl;
+//	if(p>0.4 && p <0.6)
+	if(p>0.40)
 		return true; // Esto es un truquillo para no jugarsela en un rango de más indecisión
-	if(p>0.5)
-		return true;
+//	if(p>0.5)
+//		return true;
 	else return false;
 }
 
@@ -179,8 +180,10 @@ void LRMachine::trainByGradient(int iter, double alpha) {
 }
 
 void LRMachine::trainByNormalEcuation() {
+	// Actualizo aqui el número de características
+	int nFeaturesCuad = 2*nFeatures;
 	// Obtengo la X
-	arma::mat X = arma::mat(trainingSet.size(), nFeatures+1);
+	arma::mat X = arma::mat(trainingSet.size(), nFeaturesCuad+1);
 	for(int i=0; i<trainingSet.size(); i++){
 		for(int j=0; j<nFeatures+1; j++){
 			if(j==0)
@@ -188,27 +191,38 @@ void LRMachine::trainByNormalEcuation() {
 			else X(i,j)=trainingSet[i].input[j-1];
 		}
 	}
+	// Elementos cuadráticos
+	for(int i=0; i<trainingSet.size(); i++){
+		for(int j=0; j<nFeatures; j++){
+			X(i,nFeatures+j+1)=pow(trainingSet[i].input[j],2);
+		}
+	}
 	// Obtengo la Y
 	arma::mat y = arma::mat(trainingSet.size(), 1);
 	for(int i=0; i<trainingSet.size(); i++){
-		for(int i=0; i<trainingSet.size(); i++){
-			if(trainingSet[i].burn)
-				y(i)=1;
-			else y(i)=0;
-		}
+		if(trainingSet[i].burn)
+			y(i)=1;
+		else y(i)=0;
 	}
+	// Calculo la matriz de alpha
+	arma::mat Alpha(nFeaturesCuad+1, nFeaturesCuad+1);
+	Alpha.eye();
+	Alpha(0,0)=0;
+	alphaTrain*Alpha;
+//	std::cout << Alpha;
 	// Inicializo theta
-	arma::mat theta = arma::mat(nFeatures+1, 1);
+	arma::mat theta = arma::mat(nFeaturesCuad+1, 1);
 	// Calculo vectorialmente
-	theta = arma::pinv(X.t()*X)*X.t()*y;
-
+	theta = arma::pinv(X.t()*X+Alpha)*X.t()*y;
+//	std::cout << theta;
 	this->theta.clear();
-	for(int i=0; i<nFeatures+1; i++){
+	for(int i=0; i<nFeaturesCuad+1; i++){
 		this->theta.push_back(theta(i));
 	}
 }
 
 void LRMachine::fillX() {
+	//
 	for(int i=0; i<trainingSet.size(); i++){
 		for(int j=0; j<nFeatures+1; j++){
 			if(j==0)
@@ -216,6 +230,8 @@ void LRMachine::fillX() {
 			else X[i][j]=trainingSet[i].input[j-1];
 		}
 	}
+
+
 }
 
 void LRMachine::fillTheta() {
@@ -229,4 +245,8 @@ void LRMachine::fillY() {
 			y[i]=1;
 		else y[i]=0;
 	}
+}
+
+void LRMachine::upgradeParameters() {
+
 }
