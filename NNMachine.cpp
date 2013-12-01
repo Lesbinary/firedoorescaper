@@ -6,6 +6,7 @@
  */
 
 #include "NNMachine.h"
+#include "Utils.h"
 
 //A falta de completar
 NNMachine::NNMachine() { }
@@ -23,7 +24,7 @@ void NNMachine::addTrainingSample(Sample sample) {
 //A falta de completar
 bool NNMachine::isTrainingReady() {
 	if(trainingSet.size() == 1){
-			nFeatures=trainingSet[0].getNFeatures();
+			nSamples=trainingSet[0].getNFeatures();
 		}
 		if(trainingSet.size() > 20 ){
 			if(trainType == 1) train();
@@ -66,45 +67,59 @@ void NNMachine::backPropagation(){
 		}
 	}
 
-	for(int i = 0; i < this->nFeatures; i++){
+	//Thetas pasa a ser un vector, para poder ser usado
+	std::vector<double> thetas;
+
+	for(int l = 0; l < this->thetas.size(); l++){
+		for(int j = 0; j < this->thetas[l].size(); j++){
+			for(int k = 0; k < this->thetas[l][j].size(); k++){
+				thetas.push_back(this->thetas[l][j][k]);
+			}
+		}
+	}
+
+	//Empieza el algoritmo
+	//Para cada muestra
+	for(int i = 0; i < this->nSamples; i++){
 		a[0] = trainingSet[i].input;
 
 		//Cálculo de a^(l) mediante forward propagation
 		for(int l = 1; l < this->thetas.size()-1; l++){
-			forwardPropagation(a[l-1],a[l],thetas[l-1]);
+			forwardPropagation(a[l-1],a[l],thetas,l-1);
 		}
 
 		//Uso de y^(i) para calcular lowerDelta^(L)
-		for(int j = 0; j < a[nFeatures-1].size(); j++){
-			lowerDelta[nFeatures-1][j] = a[nFeatures-1][j] - y[i][j];
+		for(int j = 0; j < a[nSamples-1].size(); j++){
+			lowerDelta[nSamples-1][j] = a[nSamples-1][j] - y[i][j];
 		}
 
 		//Cómputo de los demás lowerDelta^(l)
 		for(int l = L-2; l >=0; l--){//De atras adelante, por capas
-			for(int j = 0; j < thetas[l].size(); j++){//De adelante atras, por niveles
-				for(int k = 0; k < thetas[l][j].size(); k++){//todas las thetas
-					lowerDelta[l][j] += thetas[l][j][k]*lowerDelta[l+1][k];//puede que me haya liado con los índices
+			for(int j = 0; j < s_l[l]; j++){//De adelante atras, por niveles
+				for(int k = 0; k < s_l[l+1]; k++){//todas las thetas
+					lowerDelta[l][j] += Utils::getElement(thetas,s_l,l,j,k)*lowerDelta[l+1][k];//puede que me haya liado con los índices
 				}
 			}
 		}
 
 		//Cálculo de upperDelta
 		for(int l = L-2; l >=0; l--){//De atras adelante, por capas
-			for(int j = 0; j < thetas[l].size(); j++){//De adelante atras, por niveles
-				for(int k = 0; k < thetas[l][j].size(); k++){//todas las thetas
+			for(int j = 0; j < s_l[l]; j++){//De adelante atras, por niveles
+				for(int k = 0; k < s_l[l+1]; k++){//todas las thetas
 					upperDelta[l][j][k] += a[l][j]*lowerDelta[l+1][k];
 				}
 			}
 		}
 	}
 
-	std::vector<std::vector<std::vector<double> > > D;
+	std::vector<double> D;
+	std::vector<double> gradApprox;
 
 	//Cálculo de la D
-	for(int l = 0; l < this->thetas.size(); l++){
-		for(int j = 0; j < this->thetas[l].size(); j++){
-			for(int k = 0; k < this->thetas[l][j].size(); k++){
-				D[l][j][k] = upperDelta[l][j][k]/this->y.size();
+	for(int l = 0; l < L-1; l++){//De atras adelante, por capas
+		for(int j = 0; j < s_l[l]; j++){//De adelante atras, por niveles
+			for(int k = 0; k < s_l[l+1]; k++){//todas las thetas
+				D.push_back(upperDelta[l][j][k]/this->y.size());
 			}
 		}
 	}
@@ -119,29 +134,30 @@ void NNMachine::backPropagation(){
 
 	double epsilon = 0.001;
 
-	for(int l = 0; l < this->thetas.size(); l++){
-		for(int j = 0; j < this->thetas[l].size(); j++){
-			for(int k = 0; k < this->thetas[l][j].size(); k++){
-				std::vector<std::vector<std::vector<double> > > thetasPlus(this->thetas);
-				std::vector<std::vector<std::vector<double> > > thetasMinus(this->thetas);
+	for(int l = 0; l < L-1; l++){//De atras adelante, por capas
+		for(int j = 0; j < s_l[l]; j++){//De adelante atras, por niveles
+			for(int k = 0; k < s_l[l+1]; k++){//todas las thetas
+				std::vector<double> thetasPlus(thetas);
+				std::vector<double> thetasMinus(thetas);
 
-				thetasPlus[l][j][k] += epsilon;
-				thetasMinus[l][j][k] -= epsilon;
+				double element = Utils::getElement(thetasPlus,this->s_l,l,j,k);
 
-				//y ahora la funcion de costWHAT
-				std::vector<std::vector<double> > as;
+				Utils::setElement(thetasPlus,this->s_l,l,j,k,element+epsilon);
+				Utils::setElement(thetasMinus,this->s_l,l,j,k,element-epsilon);
 
-				//cost(as,thetasPlus,trainingSet[i].input,)
+				gradApprox.push_back((cost(thetasPlus)-cost(thetasMinus))/2*epsilon);
 			}
 		}
 	}
+
+	//Si graddApprox es igual que D, el backpropagation se hizo bien
 }
 
 //A falta de testear
-void NNMachine::forwardPropagation(std::vector<double> x, std::vector<double> a, std::vector<std::vector<double> > theta){
-	for(int i=0; i<theta.size(); i++){
-		for(int j = 0; j < theta[0].size(); j++){
-			a[i] += theta[i][j]*x[j];
+void NNMachine::forwardPropagation(std::vector<double> x, std::vector<double> a, std::vector<double> theta, int l){
+	for(int i=0; i<this->thetas[l].size(); i++){
+		for(int j = 0; j < this->thetas[l][i].size(); j++){
+			a[i] += Utils::getElement(theta,this->s_l,l,i,j)*x[j];
 		}
 
 		a[i] = sigmoid(a[i]);
@@ -165,30 +181,32 @@ double NNMachine::cost(std::vector<double> thetas) {
 
 	double J = 0.0;
 
-	/*
 	std::vector<std::vector<double> > a;
 
-	for(int i = 0; i < this->nFeatures; i++){
-			a.push_back(trainingSet[i].input);
+	for(int i = 0; i < this->nSamples; i++){
+		a.push_back(trainingSet[i].input);
 
-			//Cálculo de a^(l) mediante forward propagation
-			for(int l = 1; l < this->thetas.size()-1; l++){
-				forwardPropagation(a[l-1],a[l],thetas[l-1]);
+		//Cálculo de a^(l) mediante forward propagation
+		for(int l = 1; l < this->L-1; l++){
+			forwardPropagation(a[l-1],a[l],thetas,l);
+		}
+
+		//Me guardo en h solo los resultados finales
+		std::vector<double> h;
+
+		for(int l = 0; l < a[this->L].size(); l++){
+			h.push_back(a[this->L][l]);
+		}
+
+		//Calculo la J
+		for(int i=0; i<y[0].size(); i++){
+			for(int k = 0; k < this->nSamples; k++){
+				J += (y[i][k]*std::log(h[k]))+((1-y[i][k])*log(1-h[k]));
 			}
-
-	a[0] = X;
-
-	for(int l = 1; l < this->thetas.size()-1; l++){
-		forwardPropagation(a[l-1],a[l],thetas[l-1]);
-	}
-
-	for(int i=0; i<y[0].size(); i++){
-		for(int k = 0; k < y.size(); k++){
-			J += (y[i][k]*std::log(h[k]))+((1-y[i][k])*log(1-h[k]));
 		}
 	}
-	*/
-	return -J/y.size();
+
+	return -J/this->nSamples;
 }
 
 double NNMachine::sigmoid(double z) {

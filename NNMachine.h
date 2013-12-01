@@ -28,7 +28,7 @@ public:
 	void pedirParametros();
 
 	private:
-		int nFeatures;
+		int nSamples;
 		int trainType; //Que de momento siempre sera 1
 
 	//Esto es pa aclararme yo
@@ -56,7 +56,7 @@ public:
 		int outputLayerSize;
 
 		void backPropagation();
-		void forwardPropagation(std::vector<double> x, std::vector<double> a, std::vector<std::vector<double> > theta);
+		void forwardPropagation(std::vector<double> x, std::vector<double> a, std::vector<double> theta, int l);
 		double cost(std::vector<double> thetas);
 		double sigmoid(double z);
 		void train();
