@@ -55,11 +55,15 @@ void NNMachine::backPropagation(){
 	//Con un trainingSet dado
 
 	std::vector<std::vector<double> > lowerDelta;
-	std::vector<double> upperDelta;
+	std::vector<std::vector<std::vector<double> > > upperDelta;
 
 	//Inicialización de upperDelta
-	for(int l = 0; l < L; l++){
-		upperDelta[l] = 0.0;
+	for(int l = 0; l < this->thetas.size(); l++){
+		for(int j = 0; j < this->thetas[l].size(); j++){
+			for(int k = 0; k < this->thetas[l][j].size(); k++){
+				upperDelta[l][j][k] = 0.0;
+			}
+		}
 	}
 
 	for(int i = 0; i < this->nFeatures; i++){
@@ -85,45 +89,51 @@ void NNMachine::backPropagation(){
 		}
 
 		//Cálculo de upperDelta
-		for(int j = lowerDelta.size()-1; j >=0; j--){
-			for(int k = 0; k < lowerDelta[j].size(); k++){
-				upperDelta[j] += a[j][k]*lowerDelta[j+1][j];
-			}
-		}
-
-		std::vector<double> D;
-
-		//Cálculo de la D
-		for(int j = 0; j < lowerDelta.size(); j++){
-			D[j] = upperDelta[j]/this->y.size();
-		}
-
-		//Ahora empezamos con el gradient check, una vez tenemos las D
-
-		//Convertimos D en un vector
-
-		//Calculamos el gradApprox
-
-		double epsilon = 0.001;
-
-		for(int l = 0; l < this->thetas.size(); l++){
-			for(int j = 0; j < this->thetas[l].size(); j++){
-				for(int k = 0; k < this->thetas[l][j].size(); k++){
-					std::vector<std::vector<std::vector<double> > > thetasPlus(this->thetas);
-					std::vector<std::vector<std::vector<double> > > thetasMinus(this->thetas);
-
-					thetasPlus[l][j][k] += epsilon;
-					thetasMinus[l][j][k] -= epsilon;
-
-					//y ahora la funcion de costWHAT
-					std::vector<std::vector<double> > as;
-
-					//cost(as,thetasPlus,trainingSet[i].input,)
+		for(int l = L-2; l >=0; l--){//De atras adelante, por capas
+			for(int j = 0; j < thetas[l].size(); j++){//De adelante atras, por niveles
+				for(int k = 0; k < thetas[l][j].size(); k++){//todas las thetas
+					upperDelta[l][j][k] += a[l][j]*lowerDelta[l+1][k];
 				}
 			}
 		}
+	}
 
+	std::vector<std::vector<std::vector<double> > > D;
 
+	//Cálculo de la D
+	for(int l = 0; l < this->thetas.size(); l++){
+		for(int j = 0; j < this->thetas[l].size(); j++){
+			for(int k = 0; k < this->thetas[l][j].size(); k++){
+				D[l][j][k] = upperDelta[l][j][k]/this->y.size();
+			}
+		}
+	}
+
+	//A partir de aqui deberia funcionar todo con vectores
+
+	//Ahora empezamos con el gradient check, una vez tenemos las D
+
+	//Convertimos D en un vector
+
+	//Calculamos el gradApprox
+
+	double epsilon = 0.001;
+
+	for(int l = 0; l < this->thetas.size(); l++){
+		for(int j = 0; j < this->thetas[l].size(); j++){
+			for(int k = 0; k < this->thetas[l][j].size(); k++){
+				std::vector<std::vector<std::vector<double> > > thetasPlus(this->thetas);
+				std::vector<std::vector<std::vector<double> > > thetasMinus(this->thetas);
+
+				thetasPlus[l][j][k] += epsilon;
+				thetasMinus[l][j][k] -= epsilon;
+
+				//y ahora la funcion de costWHAT
+				std::vector<std::vector<double> > as;
+
+				//cost(as,thetasPlus,trainingSet[i].input,)
+			}
+		}
 	}
 }
 
@@ -139,7 +149,7 @@ void NNMachine::forwardPropagation(std::vector<double> x, std::vector<double> a,
 }
 
 //A falta de testear
-double NNMachine::cost(std::vector<std::vector<double> > a, std::vector<std::vector<std::vector<double> > > thetas, std::vector<double> X, std::vector<double> y) {
+double NNMachine::cost(std::vector<double> thetas) {
 	//Voy a hacer la ecuación tal cual está en las Lectures y las diapositivas de Andrew, no en los ejercicios
 
 	//y es el vector de doubles procedentes de booleanos, que almacena si las puertas arden o no
@@ -151,8 +161,21 @@ double NNMachine::cost(std::vector<std::vector<double> > a, std::vector<std::vec
 	//La "m" de la ecuación sería y.size()
 	//La "K" de la ecuación sería y[i].size()
 
+	//Usaremos Utils::getElement(thetas,this->s_l,l,j,k) para acceder al elemento
+
 	double J = 0.0;
+
 	/*
+	std::vector<std::vector<double> > a;
+
+	for(int i = 0; i < this->nFeatures; i++){
+			a.push_back(trainingSet[i].input);
+
+			//Cálculo de a^(l) mediante forward propagation
+			for(int l = 1; l < this->thetas.size()-1; l++){
+				forwardPropagation(a[l-1],a[l],thetas[l-1]);
+			}
+
 	a[0] = X;
 
 	for(int l = 1; l < this->thetas.size()-1; l++){
