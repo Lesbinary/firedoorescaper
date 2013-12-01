@@ -12,6 +12,8 @@
 #include <cmath>
 #include <iostream>
 
+// Implementar Precision and Recall
+
 class LRMachine : public IMachine {
 public:
 	LRMachine();
