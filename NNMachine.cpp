@@ -109,6 +109,8 @@ void NNMachine::backPropagation(){
 		}
 	}
 
+	//A partir de aqui deberia funcionar todo con vectores
+
 	//Ahora empezamos con el gradient check, una vez tenemos las D
 
 	//Convertimos D en un vector
@@ -159,7 +161,10 @@ double NNMachine::cost(std::vector<double> thetas) {
 	//La "m" de la ecuación sería y.size()
 	//La "K" de la ecuación sería y[i].size()
 
+	//Usaremos Utils::getElement(thetas,this->s_l,l,j,k) para acceder al elemento
+
 	double J = 0.0;
+
 	/*
 	std::vector<std::vector<double> > a;
 
