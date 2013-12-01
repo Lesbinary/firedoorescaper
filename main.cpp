@@ -38,6 +38,8 @@ using namespace FireDoorEscaper;
 // Nota razonable: 3 modelos (Medio y difícil)
 //                 1-2 técnicas
 
+//Para la optimizacion avanzada voy, meto aquí el enlace, creo que me decanto por esta por simplicidad
+//Cuando pueda hago una implementación, pero la documentacion es sencillita: http://www.chokkan.org/software/liblbfgs/
 
 // Print Game Status Values
 void
