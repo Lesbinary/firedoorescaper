@@ -147,7 +147,35 @@ void LRMachine::grad(std::vector<double> tetha, std::vector<std::vector<double> 
 }
 
 void LRMachine::trainByGradientAdvanced(int iter, double alpha) {
+	int i, ret = 0;
+	lbfgsfloatval_t fx;
+	lbfgsfloatval_t *theta = lbfgs_malloc(X.size());
+	lbfgs_parameter_t param;
 
+	if (theta == NULL) {
+		printf("ERROR: Failed to allocate a memory block for variables.\n");
+	}
+
+	/* Initialize the variables. */
+	for (i = 0;i < X.size();i += 2) {
+		theta[i] = this->theta[i];
+	}
+
+	/* Initialize the parameters for the L-BFGS optimization. */
+	lbfgs_parameter_init(&param);
+	/*param.linesearch = LBFGS_LINESEARCH_BACKTRACKING;*/
+
+	/*
+		Start the L-BFGS optimization; this will invoke the callback functions
+		evaluate() and progress() when necessary.
+	 */
+	ret = lbfgs(X.size(), theta, NULL, evaluateLR, progressLR, NULL, &param);
+
+	/* Report the result. */
+	printf("L-BFGS optimization terminated with status code = %d\n", ret);
+	printf("  fx = %f, x[0] = %f, x[1] = %f\n", fx, theta[0], theta[1]);
+
+	lbfgs_free(theta);
 }
 
 void LRMachine::trainByGradient(int iter, double alpha) {
@@ -254,22 +282,34 @@ void LRMachine::upgradeParameters() {
 }
 
 // Cálculo del coste
-static lbfgsfloatval_t evaluate(void *instance, const lbfgsfloatval_t *x, lbfgsfloatval_t *g,
+lbfgsfloatval_t LRMachine::evaluateLR(void *instance, const lbfgsfloatval_t *x, lbfgsfloatval_t *g,
 		const int n, const lbfgsfloatval_t step){
-    int i;
-    lbfgsfloatval_t fx = 0.0;
-    for (i = 0;i < n;i += 2) {
-        lbfgsfloatval_t t1 = 1.0 - x[i];
-        lbfgsfloatval_t t2 = 10.0 * (x[i+1] - x[i] * x[i]);
-        g[i+1] = 20.0 * t2;
-        g[i] = -2.0 * (x[i] * g[i+1] + t1);
-        fx += t1 * t1 + t2 * t2;
-    }
-    return fx;
+	// Este método tiene que computar el gradiente para los parámetros x y meterlos en g
+
+	// Meto X en nuestro theta
+	std::vector<double> theta;
+	for(int i=0; i<n; i++){
+		theta.push_back(x[i]);
+	}
+	// Inicializo mi gradiente
+	std::vector<double> gradiente;
+	// Inicializo las y
+	this->fillY();
+
+	// Calculo el coste y el gradiente
+	grad(theta, X, y, gradiente);
+	double coste = cost(theta, X, y);
+
+    // Recupero el gradiente
+	for(int i=0; i<n; i++)
+		g[i]=gradiente[i];
+
+    return coste;
 }
 
-static int progress(void *instance, const lbfgsfloatval_t *x, const lbfgsfloatval_t *g, const lbfgsfloatval_t fx, const lbfgsfloatval_t xnorm,
+int LRMachine::progressLR(void *instance, const lbfgsfloatval_t *x, const lbfgsfloatval_t *g, const lbfgsfloatval_t fx, const lbfgsfloatval_t xnorm,
     const lbfgsfloatval_t gnorm, const lbfgsfloatval_t step, int n, int k, int ls)
+
 {
     printf("Iteration %d:\n", k);
     printf("  fx = %f, x[0] = %f, x[1] = %f\n", fx, x[0], x[1]);
