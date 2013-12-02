@@ -112,23 +112,19 @@ void NNMachine::backPropagation(){
 		}
 	}
 
-	for(int l = 0; l < thetas.size(); l++){
-		std::cout << thetas[l] << " ";
-	}
-
-	std::cout << std::endl;
-
-	while(1){}
+	nSamples = trainingSet.size();
 
 	//Empieza el algoritmo
 	//Para cada muestra
 	for(int i = 0; i < this->nSamples; i++){
-		a[0] = trainingSet[i].input;
+		a.push_back(trainingSet[i].input);
 
 		//Cálculo de a^(l) mediante forward propagation
 		for(int l = 1; l < this->thetas.size()-1; l++){
 			forwardPropagation(a[l-1],a[l],thetas,l-1);
 		}
+
+/* Debugging
 
 		//Uso de y^(i) para calcular lowerDelta^(L)
 		for(int j = 0; j < a[nSamples-1].size(); j++){
@@ -152,6 +148,7 @@ void NNMachine::backPropagation(){
 				}
 			}
 		}
+*/
 	}
 
 	std::vector<double> D;
@@ -193,7 +190,12 @@ void NNMachine::backPropagation(){
 	}
 
 	//Si graddApprox es igual que D, el backpropagation se hizo bien
-	std::cout << "Size of D is " << D.size() << " and size of gradApprox is " << gradApprox.size() << std::endl;
+
+	for(int l = 0; l < D.size(); l++){
+		std::cout << "En D es " << D[l] << " y en gradApprox es " << gradApprox[l] << std::endl;
+	}
+
+	while(1){}
 }
 
 //A falta de testear
@@ -259,5 +261,8 @@ double NNMachine::sigmoid(double z) {
 
 void NNMachine::train() {
 	std::cout << "Empiesa el backpropagation nano" << std::endl;
+
+//fillY()
+
 	backPropagation();
 }
