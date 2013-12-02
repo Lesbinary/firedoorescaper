@@ -91,6 +91,11 @@ main(int argvc, char *argv[]) {
     		machine = new GodMachine(LogisticRegresion);
 
     		break;
+    	case 2: // Neural Network
+    		std::cout << "Neural networks bitch" << std::endl;
+			machine = new GodMachine(neuralNetwork);
+
+			break;
     	default: // Por defecto
     		machine = new GodMachine(LogisticRegresion);
     		break;
@@ -137,6 +142,8 @@ main(int argvc, char *argv[]) {
     	break;
     	}
     }
+
+    std::cout << "Yeah!" << std::endl;
 
     game->setGameDifficultyMode(CGame::GDM_SAMELEVEL);
     // Main loop: stay will the game is on (i.e. the player is alive)
