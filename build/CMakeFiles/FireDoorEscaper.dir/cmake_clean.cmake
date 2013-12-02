@@ -1,9 +1,9 @@
 FILE(REMOVE_RECURSE
+  "CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o"
   "CMakeFiles/FireDoorEscaper.dir/cgame.o"
   "CMakeFiles/FireDoorEscaper.dir/cfiredoor.o"
-  "CMakeFiles/FireDoorEscaper.dir/crandomgenerator.o"
-  "/home/antonio/git/firedoorescaper/lib/libFireDoorEscaper.pdb"
-  "/home/antonio/git/firedoorescaper/lib/libFireDoorEscaper.a"
+  "/home/leopoldo/workspaceC/fretsonfire/lib/libFireDoorEscaper.pdb"
+  "/home/leopoldo/workspaceC/fretsonfire/lib/libFireDoorEscaper.a"
 )
 
 # Per-language clean rules from dependency scanning.

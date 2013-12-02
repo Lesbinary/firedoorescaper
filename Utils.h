@@ -2,6 +2,8 @@
 #define UTILS_H_
 
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 class Utils{
 public:
@@ -36,7 +38,12 @@ public:
 	}
 
 	static void plotData(std::vector<double> x, std::vector<double> y){
-
+		std::ofstream myfile;
+		myfile.open ("dataset.dat");
+		for(int i = 0; i < x.size(); i++)
+			myfile << x[i] << " " << y[i] << std::endl;
+		myfile.close();
+		system("gnuplot -persist -e \"plot './datafile.dat' using 1:2 title 'X' with linespoints, './datafile.dat' using 1:2 title 'Y' with points\"");
 	}
 };
 

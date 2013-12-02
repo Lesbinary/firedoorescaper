@@ -6,19 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/home/antonio/git/firedoorescaper/src/../include/cfiredoor.h
+/home/leopoldo/workspaceC/fretsonfire/src/../include/cfiredoor.h
 vector
 -
 boost/noncopyable.hpp
 -
 
-/home/antonio/git/firedoorescaper/src/../include/cgame.h
+/home/leopoldo/workspaceC/fretsonfire/src/../include/cgame.h
 vector
 -
 boost/noncopyable.hpp
 -
 
-/home/antonio/git/firedoorescaper/src/../include/crandomgenerator.h
+/home/leopoldo/workspaceC/fretsonfire/src/../include/crandomgenerator.h
 vector
 -
 boost/noncopyable.hpp
@@ -30,7 +30,7 @@ boost/random/uniform_int_distribution.hpp
 boost/random/uniform_real_distribution.hpp
 -
 
-/home/antonio/git/firedoorescaper/src/cfiredoor.cpp
+/home/leopoldo/workspaceC/fretsonfire/src/cfiredoor.cpp
 cmath
 -
 cfiredoor.h
@@ -38,9 +38,9 @@ cfiredoor.h
 crandomgenerator.h
 -
 
-/home/antonio/git/firedoorescaper/src/cgame.cpp
+/home/leopoldo/workspaceC/fretsonfire/src/cgame.cpp
 cgame.h
-/home/antonio/git/firedoorescaper/src/cgame.h
+/home/leopoldo/workspaceC/fretsonfire/src/cgame.h
 cfiredoor.h
 -
 crandomgenerator.h
@@ -48,7 +48,7 @@ crandomgenerator.h
 cmath
 -
 
-/home/antonio/git/firedoorescaper/src/crandomgenerator.cpp
+/home/leopoldo/workspaceC/fretsonfire/src/crandomgenerator.cpp
 crandomgenerator.h
-/home/antonio/git/firedoorescaper/src/crandomgenerator.h
+/home/leopoldo/workspaceC/fretsonfire/src/crandomgenerator.h
 
