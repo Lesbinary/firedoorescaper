@@ -29,7 +29,7 @@ public:
 
 	private:
 		int nSamples;
-		int trainType; //Que de momento siempre sera 1
+		int nFeatures;
 
 	//Esto es pa aclararme yo
 		int L; //numero de capas de la red
@@ -48,7 +48,6 @@ public:
 
 	//Variables para las ecuaciones
 		std::vector<std::vector<double> > y;
-		std::vector<std::vector<double> > X;
 
 	//Estas variables sirven para inicializar los vectores (después usaremos el size())
 		int inputLayerSize;

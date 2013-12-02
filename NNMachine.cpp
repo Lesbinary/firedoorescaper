@@ -9,7 +9,29 @@
 #include "Utils.h"
 
 //A falta de completar
-NNMachine::NNMachine() { }
+NNMachine::NNMachine() {
+	L = 3;
+	s_l.push_back(3);	s_l.push_back(2);	s_l.push_back(1);
+
+	std::vector<std::vector<double> > v2;
+	std::vector<double> v1;
+
+	for(int l = 0; l < L-1; l++){//De atras adelante, por capas
+		v2.clear();
+
+		for(int j = 0; j < s_l[l]; j++){//De adelante atras, por niveles
+			v1.clear();
+
+			for(int k = 0; k < s_l[l+1]; k++){//todas las thetas
+				v1.push_back(3.0);
+			}
+
+			v2.push_back(v1);
+		}
+
+		thetas.push_back(v2);
+	}
+}
 
 //A falta de completar
 NNMachine::~NNMachine() { }
@@ -24,12 +46,13 @@ void NNMachine::addTrainingSample(Sample sample) {
 //A falta de completar
 bool NNMachine::isTrainingReady() {
 	if(trainingSet.size() == 1){
-			nSamples=trainingSet[0].getNFeatures();
-		}
-		if(trainingSet.size() > 20 ){
-			if(trainType == 1) train();
-			return true;
-		} else return false;
+		nFeatures=trainingSet[0].getNFeatures();
+	}
+
+	if(trainingSet.size() > 3 ){
+		train();
+		return true;
+	} else return false;
 }
 
 bool NNMachine::isReadyToCross() {
@@ -47,7 +70,7 @@ bool NNMachine::isDoorOnFire(double input[]) {
 }
 
 void NNMachine::clearTrainingSet() {
-	inputLayer.clear();
+	trainingSet.clear();
 	classifySuccesses=0;
 }
 
@@ -59,12 +82,23 @@ void NNMachine::backPropagation(){
 	std::vector<std::vector<std::vector<double> > > upperDelta;
 
 	//Inicialización de upperDelta
-	for(int l = 0; l < this->thetas.size(); l++){
-		for(int j = 0; j < this->thetas[l].size(); j++){
-			for(int k = 0; k < this->thetas[l][j].size(); k++){
-				upperDelta[l][j][k] = 0.0;
+	std::vector<std::vector<double> > v2;
+	std::vector<double> v1;
+
+	for(int l = 0; l < L-1; l++){//De atras adelante, por capas
+		v2.clear();
+
+		for(int j = 0; j < s_l[l]; j++){//De adelante atras, por niveles
+			v1.clear();
+
+			for(int k = 0; k < s_l[l+1]; k++){//todas las thetas
+				v1.push_back(0.0);
 			}
+
+			v2.push_back(v1);
 		}
+
+		upperDelta.push_back(v2);
 	}
 
 	//Thetas pasa a ser un vector, para poder ser usado
@@ -77,6 +111,14 @@ void NNMachine::backPropagation(){
 			}
 		}
 	}
+
+	for(int l = 0; l < thetas.size(); l++){
+		std::cout << thetas[l] << " ";
+	}
+
+	std::cout << std::endl;
+
+	while(1){}
 
 	//Empieza el algoritmo
 	//Para cada muestra
@@ -151,6 +193,7 @@ void NNMachine::backPropagation(){
 	}
 
 	//Si graddApprox es igual que D, el backpropagation se hizo bien
+	std::cout << "Size of D is " << D.size() << " and size of gradApprox is " << gradApprox.size() << std::endl;
 }
 
 //A falta de testear
@@ -215,4 +258,6 @@ double NNMachine::sigmoid(double z) {
 }
 
 void NNMachine::train() {
+	std::cout << "Empiesa el backpropagation nano" << std::endl;
+	backPropagation();
 }
