@@ -34,6 +34,10 @@ public:
 
 		vect[index] = element;
 	}
+
+	static void plotData(std::vector<double> x, std::vector<double> y){
+
+	}
 };
 
 #endif /* SAMPLE_H_ */

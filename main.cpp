@@ -41,6 +41,8 @@ using namespace FireDoorEscaper;
 //Para la optimizacion avanzada meto aquí el enlace, creo que me decanto por esta por simplicidad
 //Cuando pueda hago una implementación, pero la documentacion es sencillita: http://www.chokkan.org/software/liblbfgs/
 
+//Libro de ordenes
+
 // Print Game Status Values
 void
 printGameStatus(const CGame& g) {

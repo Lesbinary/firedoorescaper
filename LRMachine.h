@@ -11,6 +11,8 @@
 #include "IMachine.h"
 #include <cmath>
 #include <iostream>
+#include "armadillo"
+#include <lbfgs.h>
 
 // Implementar Precision and Recall
 
@@ -44,6 +46,7 @@ private:
 	double cost(std::vector<double> theta, std::vector<std::vector<double> > X, std::vector<double> y);
 	void grad(std::vector<double> tetha, std::vector<std::vector<double> > X, std::vector<double> y, std::vector<double> grad);
 	void trainByGradient(int iter, double alpha);
+	void trainByGradientAdvanced(int iter, double alpha);
 	void trainByNormalEcuation();
 	void upgradeParameters();
 
