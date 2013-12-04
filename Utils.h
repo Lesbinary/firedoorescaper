@@ -22,7 +22,7 @@ public:
 		return vect[index];
 	}
 
-	static void setElement(std::vector<double> vect, std::vector<int> info, int l, int j, int k, double element){
+	static void setElement(std::vector<double> &vect, std::vector<int> info, int l, int j, int k, double element){
 		int index = 0;
 		int i;
 

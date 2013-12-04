@@ -92,7 +92,6 @@ main(int argvc, char *argv[]) {
 
     		break;
     	case 2: // Neural Network
-    		std::cout << "Neural networks bitch" << std::endl;
 			machine = new GodMachine(neuralNetwork);
 
 			break;
@@ -156,7 +155,7 @@ main(int argvc, char *argv[]) {
     	}
 
         const CFireDoor& fd = game->getCurrentFireDoor();
-        printGameStatus(*game);
+        //printGameStatus(*game);
 
         //Almacenamos el conjunto de entrenamiento
     	while(!machine->isTrainingReady()){
