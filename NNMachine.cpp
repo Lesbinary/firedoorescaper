@@ -61,7 +61,6 @@ void NNMachine::backPropagation(){
 	std::vector<std::vector<double> > v2;
 	std::vector<double> v1;
 
-	std::vector<std::vector<double> > lowerDelta;
 	std::vector<std::vector<std::vector<double> > > upperDelta;
 
 	//Inicialización de upperDelta
@@ -81,17 +80,6 @@ void NNMachine::backPropagation(){
 		upperDelta.push_back(v2);
 	}
 
-	//Inicialización de lowerDelta
-	for(int l = 1; l < L; l++){
-		v1.clear();
-
-		for(int j = 0; j < s_l[l]; j++){
-			v1.push_back(0.0);
-		}
-
-		lowerDelta.push_back(v1);
-	}
-
 	//Thetas pasa a ser un vector, para poder ser usado
 	std::vector<double> thetas;
 
@@ -106,6 +94,19 @@ void NNMachine::backPropagation(){
 	//Empieza el algoritmo
 	//Para cada muestra
 	for(int i = 0; i < this->nSamples; i++){
+		std::vector<std::vector<double> > lowerDelta;
+
+		//Inicialización de lowerDelta
+		for(int l = 1; l < L; l++){
+			v1.clear();
+
+			for(int j = 0; j < s_l[l]; j++){
+				v1.push_back(0.0);
+			}
+
+			lowerDelta.push_back(v1);
+		}
+
 		std::cout << "Muestra " << i << std::endl;
 
 		initA();
@@ -126,22 +127,38 @@ void NNMachine::backPropagation(){
 		for(int l = L-3; l >=0; l--){//De atras adelante, por capas
 			for(int j = 0; j < s_l[l]; j++){//De adelante atras, por niveles
 				for(int k = 0; k < s_l[l+1]; k++){//todas las thetas
+					std::cout << "Con lowerDelta anterior " << lowerDelta[l+1][k] << " y theta " << Utils::getElement(thetas,s_l,l,j,k);
 					lowerDelta[l][j] += Utils::getElement(thetas,s_l,l,j,k)*lowerDelta[l+1][k];//puede que me haya liado con los índices
+					std::cout << " la siguiente es " << lowerDelta[l][j] << std::endl;
 				}
 			}
 		}
 
+		std::cout << "lowerDelta es ";
+
+		for(int l = 0; l < L-1; l++){
+			for(int j = 0; j < s_l[l]; j++){
+				std::cout << lowerDelta[l][j] << " ";
+			}
+		}
+		std::cout << std::endl;
+
 //LOWERDELTA SE CALCULA BIEN
 
+		std::cout << "Los valores de upperDelta para esta muestra son: ";
 		//Cálculo de upperDelta: es muy simple, suponemos que va
 		for(int l = 0; l < L-1; l++){
 			for(int j = 0; j < s_l[l]; j++){
 				for(int k = 0; k < s_l[l+1]; k++){
 					upperDelta[l][j][k] += a[l][j]*lowerDelta[l][k];
+					std::cout << a[l][j]*lowerDelta[l][k] << " ";
 				}
 			}
 		}
+		std::cout << std::endl;
 	}
+
+	std::cout << std::endl;
 
 	std::cout << "Muestro upperDelta" << std::endl;
 	for(int l = 0; l < L-1; l++){
