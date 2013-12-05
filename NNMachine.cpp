@@ -125,8 +125,8 @@ void NNMachine::backPropagation(){
 
 		//Cómputo de los demás lowerDelta^(l)
 		for(int l = L-3; l >=0; l--){//De atras adelante, por capas
-			for(int j = 0; j < s_l[l]; j++){//De adelante atras, por niveles
-				for(int k = 0; k < s_l[l+1]; k++){//todas las thetas
+			for(int j = 0; j < s_l[l+1]; j++){//De adelante atras, por niveles
+				for(int k = 0; k < s_l[l+2]; k++){//todas las thetas
 					std::cout << "Con lowerDelta anterior " << lowerDelta[l+1][k] << " y theta " << Utils::getElement(thetas,s_l,l,j,k);
 					lowerDelta[l][j] += Utils::getElement(thetas,s_l,l,j,k)*lowerDelta[l+1][k];//puede que me haya liado con los índices
 					std::cout << " la siguiente es " << lowerDelta[l][j] << std::endl;
@@ -137,15 +137,13 @@ void NNMachine::backPropagation(){
 		std::cout << "lowerDelta es ";
 
 		for(int l = 0; l < L-1; l++){
-			for(int j = 0; j < s_l[l]; j++){
+			for(int j = 0; j < s_l[l+1]; j++){
 				std::cout << lowerDelta[l][j] << " ";
 			}
 		}
 		std::cout << std::endl;
 
-//LOWERDELTA SE CALCULA BIEN
-
-		std::cout << "Los valores de upperDelta para esta muestra son: ";
+		std::cout << "Los valores de upperDelta para esta muestra son: " << std::endl;
 		//Cálculo de upperDelta: es muy simple, suponemos que va
 		for(int l = 0; l < L-1; l++){
 			for(int j = 0; j < s_l[l]; j++){
@@ -153,7 +151,9 @@ void NNMachine::backPropagation(){
 					upperDelta[l][j][k] += a[l][j]*lowerDelta[l][k];
 					std::cout << a[l][j]*lowerDelta[l][k] << " ";
 				}
+				std::cout << std::endl;
 			}
+			std::cout << std::endl;
 		}
 		std::cout << std::endl;
 	}
@@ -165,7 +165,7 @@ void NNMachine::backPropagation(){
 		for(int j = 0; j < s_l[l]; j++){
 			for(int k = 0; k < s_l[l+1]; k++){
 				std::cout << l << " " << j << " " << k << std::endl;
-				std::cout << upperDelta[l][j][k] << " ";
+				std::cout << upperDelta[l][j][k] << " " << std::endl;
 			}
 			std::cout << std::endl;
 		}
@@ -232,20 +232,23 @@ void NNMachine::forwardPropagation(std::vector<double> theta){
 	std::cout << std::endl;
 
 	for(int l = 0; l < this->L-1; l++){
-		for(int i = 0; i<this->s_l[l]; i++){
-			for(int j = 0; j < this->s_l[l+1]; j++){
+		for(int i = 0; i<this->s_l[l+1]; i++){
+			for(int j = 0; j < this->s_l[l]; j++){
 				std::cout << "La anterior es " << a[l][j];
+				std::cout << ", la theta " << Utils::getElement(theta,this->s_l,l,i,j);
 				a[l+1][i] += Utils::getElement(theta,this->s_l,l,i,j)*a[l][j];
-				std::cout << ", la siguiente " << a[l+1][i];
+				std::cout << ", la siguiente " << a[l+1][i] << std::endl;
 			}
 
 			a[l+1][i] = sigmoid(a[l+1][i]);
 			std::cout << " y su sigmoide " << a[l+1][i] << std::endl;
 		}
+		std::cout << std::endl;
 	}
+	std::cout << std::endl;
 }
 
-//FUNCIONA
+//FUNCIONA? SIIIIII?
 double NNMachine::cost(std::vector<double> thetas) {
 	//Voy a hacer la ecuación tal cual está en las Lectures y las diapositivas de Andrew, no en los ejercicios
 
@@ -259,11 +262,6 @@ double NNMachine::cost(std::vector<double> thetas) {
 	//La "K" de la ecuación sería y[i].size()
 
 	//Usaremos Utils::getElement(thetas,this->s_l,l,j,k) para acceder al elemento
-
-	for(int l = 0; l < thetas.size(); l++){
-		std::cout << thetas[l] << " ";
-	}
-	std::cout << std::endl;
 
 	double J = 0.0;
 
@@ -315,8 +313,8 @@ void NNMachine::train() {
 	//Inicializamos el vector de tamaños de la red neuronal según el tamaño del vector de entrada
 	//Lo de que son 4 capas y la ultima es de tamaño 1 lo hardcodeamos aqui
 	s_l.push_back(nFeatures);
-	s_l.push_back(nFeatures);
-	s_l.push_back(nFeatures);
+	s_l.push_back(nFeatures+1);
+	s_l.push_back(nFeatures+1);
 	s_l.push_back(1);
 
 	L = s_l.size();
@@ -361,7 +359,9 @@ void NNMachine::initTheta(){
 			v1.clear();
 
 			for(int k = 0; k < s_l[l+1]; k++){
-				v1.push_back(3.0);//This must be rand
+				double random = rand() % 4 + 1;//Valor aleatorio de 1 a 4
+
+				v1.push_back(random);
 			}
 
 			v2.push_back(v1);
