@@ -7,6 +7,9 @@ Paquetes necesarios:
 
 sudo apt-get install libarmadillo-dev libboost-random1.48-dev
 
+Propios: 
+	sudo apt-get install libcgal-dev
+
 
 Para compilar esto hace falta:
 

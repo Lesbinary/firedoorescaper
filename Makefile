@@ -4,8 +4,8 @@ INC_DIR=include/
 LIB_DIR=lib/ 
 MAINFILE=main
 OBJFILE=firebitch
-LIBS=-lFireDoorEscaper -lboost_random -larmadillo
-MORE_INCLUDES= KVMachine.cpp LRMachine.cpp NNMachine.cpp
+LIBS=-lFireDoorEscaper -lboost_random -larmadillo -lCGAL
+MORE_INCLUDES= KVMachine.cpp LRMachine.cpp NNMachine.cpp SVMachine.cpp
 
 all: $(MAINFILE) 
 

@@ -9,7 +9,19 @@
 #define SVMACHINE_H_
 
 #include "IMachine.h"
-#include <QuadProg++.hh>
+#include <iostream>
+#include <vector>
+#include <CGAL/MP_Float.h>
+#include <CGAL/basic.h>
+#include <CGAL/QP_models.h>
+#include <CGAL/QP_functions.h>
+#include "armadillo"
+
+typedef std::vector<Sample> VSample;
+
+typedef CGAL::MP_Float ET;
+typedef CGAL::Quadratic_program<int> Program;
+typedef CGAL::Quadratic_program_solution<ET> Solution;
 
 class SVMachine: public IMachine {
 public:
@@ -23,6 +35,13 @@ public:
 	bool isDoorOnFire(double input[]);
 	void clearTrainingSet();
 	void pedirParametros();
+
+private:
+	VSample trainingSet;
+	int classifySuccesses;
+	int nFeatures;
+
+	void quadraticSolution();
 };
 
 #endif /* SVMACHINE_H_ */
