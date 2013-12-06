@@ -15,8 +15,9 @@
 #include "KVMachine.h"
 #include "LRMachine.h"
 #include "NNMachine.h"
+#include "SVMachine.h"
 
-enum Machine {LogisticRegresion, KVecinos, neuralNetwork};
+enum Machine {LogisticRegresion, KVecinos, neuralNetwork, SVM};
 
 class GodMachine {
 public:
@@ -31,6 +32,9 @@ public:
 			case KVecinos: machine=new KVMachine();
 				break;
 			case neuralNetwork: machine = new NNMachine();
+				break;
+			case SVM: machine = new SVMachine();
+				break;
 		}
 	}
 

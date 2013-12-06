@@ -95,6 +95,9 @@ main(int argvc, char *argv[]) {
 			machine = new GodMachine(neuralNetwork);
 
 			break;
+    	case 3: // SVM
+    		machine = new GodMachine(SVM);
+    		break;
     	default: // Por defecto
     		machine = new GodMachine(LogisticRegresion);
     		break;

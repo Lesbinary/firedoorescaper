@@ -20,9 +20,11 @@ void SVMachine::addTrainingSample(Sample sample) {
 }
 
 bool SVMachine::isTrainingReady() {
+	return false;
 }
 
 bool SVMachine::isReadyToCross() {
+	return false;
 }
 
 void SVMachine::classifySample(Sample sample) {
@@ -73,5 +75,4 @@ void SVMachine::quadraticSolution() {
 			std::cout << X.col(1).t()*X.col(1)*y(i)*y(j);
 		}
 	}
-	qp.set_a(0, 0, 1); qp.set_a(1, 0, 1); qp.set_b(0, 7); //
 }
