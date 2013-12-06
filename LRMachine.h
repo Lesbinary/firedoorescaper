@@ -11,6 +11,7 @@
 #include "IMachine.h"
 #include <cmath>
 #include <iostream>
+#include <vector>
 #include "armadillo"
 #include <lbfgs.h>
 
