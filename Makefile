@@ -10,4 +10,4 @@ MORE_INCLUDES= KVMachine.cpp LRMachine.cpp NNMachine.cpp SVMachine.cpp
 all: $(MAINFILE) 
 
 $(MAINFILE): $(MAINFILE).cpp
-	$(GCC) $(CFLAGS) $(MAINFILE).cpp -o $(OBJFILE) -I $(INC_DIR) $(MORE_INCLUDES) -L$(LIB_DIR) $(LIBS)
+	$(GCC) $(CFLAGS) $(MAINFILE).cpp -o $(OBJFILE) -I $(INC_DIR) $(MORE_INCLUDES) -L$(LIB_DIR) $(LIBS) -frounding-math

@@ -42,6 +42,7 @@ private:
 	int nFeatures;
 
 	void quadraticSolution();
+	void trainByQuadraticProgramming();
 };
 
 #endif /* SVMACHINE_H_ */
