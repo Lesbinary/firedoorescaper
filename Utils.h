@@ -15,7 +15,7 @@ public:
 			index += info[i]*info[i+1];
 		}
 
-		index += j*info[i];
+		index += j*info[i+1];
 
 		index += k;
 
@@ -30,7 +30,7 @@ public:
 			index += info[i]*info[i+1];
 		}
 
-		index += j*info[i];
+		index += j*info[i+1];
 
 		index += k;
 
