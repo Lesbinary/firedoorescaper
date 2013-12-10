@@ -20,7 +20,22 @@
 typedef std::vector<Sample> VSample;
 
 typedef CGAL::MP_Float ET;
-typedef CGAL::Quadratic_program<int> Program;
+
+//// program and solution types
+//typedef CGAL::Quadratic_program_from_iterators
+//<int**, // for A
+//int*, // for b
+//CGAL::Const_oneset_iterator<CGAL::Comparison_result>, // for r
+//bool*, // for fl
+//int*, // for l
+//bool*, // for fu
+//int*, // for u
+//double**, // for D
+//int*> // for c
+//Program;
+//typedef CGAL::Quadratic_program_solution<ET> Solution;
+
+typedef CGAL::Quadratic_program<ET> Program;
 typedef CGAL::Quadratic_program_solution<ET> Solution;
 
 class SVMachine: public IMachine {
