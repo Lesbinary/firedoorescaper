@@ -83,12 +83,15 @@ void NNMachine::backPropagation(){
 	//Thetas pasa a ser un vector, para poder ser usado
 	std::vector<double> thetas;
 
-	for(int l = 0; l < this->thetas.size(); l++){
-		for(int j = 0; j < this->thetas[l].size(); j++){
-			for(int k = 0; k < this->thetas[l][j].size(); k++){
+	for(int l = 0; l < this->L-1; l++){
+		for(int j = 0; j < this->s_l[l]; j++){
+			for(int k = 0; k < this->s_l[l+1]; k++){
+				std::cout << this->thetas[l][j][k] << " ";
 				thetas.push_back(this->thetas[l][j][k]);
 			}
+			std::cout << std::endl;
 		}
+		std::cout << std::endl;
 	}
 
 	//Empieza el algoritmo
@@ -127,8 +130,8 @@ void NNMachine::backPropagation(){
 		for(int l = L-3; l >=0; l--){//De atras adelante, por capas
 			for(int j = 0; j < s_l[l+1]; j++){//De adelante atras, por niveles
 				for(int k = 0; k < s_l[l+2]; k++){//todas las thetas
-					std::cout << "Con lowerDelta anterior " << lowerDelta[l+1][k] << " y theta " << Utils::getElement(thetas,s_l,l,j,k);
-					lowerDelta[l][j] += Utils::getElement(thetas,s_l,l,j,k)*lowerDelta[l+1][k];//puede que me haya liado con los índices
+					std::cout << "Con lowerDelta anterior " << lowerDelta[l+1][k] << " y theta " << Utils::getElement(thetas,s_l,l+1,j,k);
+					lowerDelta[l][j] += Utils::getElement(thetas,s_l,l+1,j,k)*lowerDelta[l+1][k];//puede que me haya liado con los índices
 					std::cout << " la siguiente es " << lowerDelta[l][j] << std::endl;
 				}
 			}
@@ -197,6 +200,8 @@ void NNMachine::backPropagation(){
 	for(int l = 0; l < L-1; l++){
 		for(int j = 0; j < s_l[l]; j++){
 			for(int k = 0; k < s_l[l+1]; k++){
+				std::cout << l << " " << j << " " << k << std::endl;
+
 				std::vector<double> thetasPlus(thetas);
 				std::vector<double> thetasMinus(thetas);
 
@@ -205,12 +210,24 @@ void NNMachine::backPropagation(){
 				Utils::setElement(thetasPlus,this->s_l,l,j,k,element+epsilon);
 				Utils::setElement(thetasMinus,this->s_l,l,j,k,element-epsilon);
 
+				std::cout << "thetasPlus: ";
+				for(int l = 0; l < thetasPlus.size(); l++){
+					std::cout << thetasPlus[l] << " ";
+				}
+				std::cout << std::endl;
 
+				std::cout << "thetasMinus: ";
+				for(int l = 0; l < thetasMinus.size(); l++){
+					std::cout << thetasMinus[l] << " ";
+				}
+				std::cout << std::endl;
 
 				std::cout << "El coste de thetasPlus es " << cost(thetasPlus) << std::endl;
 				std::cout << "El coste de thetasMinus es " << cost(thetasMinus) << std::endl;
+				std::cout << std::endl;
 
 				gradApprox.push_back((cost(thetasPlus)-cost(thetasMinus))/(2.0*epsilon));
+				std::cout << std::endl;
 			}
 		}
 	}
@@ -226,26 +243,34 @@ void NNMachine::backPropagation(){
 
 //FUNCIONA
 void NNMachine::forwardPropagation(std::vector<double> theta){
-	for(int l = 0; l < theta.size(); l++){
-		std::cout << theta[l] << " ";
-	}
-	std::cout << std::endl;
+//	std::cout << "Dentro del fP" << std::endl;
+//
+//	for(int l = 0; l < this->L-1; l++){
+//		for(int i = 0; i<this->s_l[l]; i++){
+//			for(int j = 0; j < this->s_l[l+1]; j++){
+//				std::cout << l << " " << i << " " << j << std::endl;
+//				std::cout << Utils::getElement(theta,this->s_l,l,i,j) << " " << std::endl;
+//			}
+//			std::cout << std::endl;
+//		}
+//		std::cout << std::endl;
+//	}
 
 	for(int l = 0; l < this->L-1; l++){
 		for(int i = 0; i<this->s_l[l+1]; i++){
 			for(int j = 0; j < this->s_l[l]; j++){
-				std::cout << "La anterior es " << a[l][j];
-				std::cout << ", la theta " << Utils::getElement(theta,this->s_l,l,i,j);
-				a[l+1][i] += Utils::getElement(theta,this->s_l,l,i,j)*a[l][j];
-				std::cout << ", la siguiente " << a[l+1][i] << std::endl;
+//				std::cout << "La anterior es " << a[l][j];
+//				std::cout << ", la theta " << Utils::getElement(theta,this->s_l,l,j,i);
+				a[l+1][i] += Utils::getElement(theta,this->s_l,l,j,i)*a[l][j];
+//				std::cout << ", la siguiente " << a[l+1][i] << std::endl;
 			}
 
 			a[l+1][i] = sigmoid(a[l+1][i]);
-			std::cout << " y su sigmoide " << a[l+1][i] << std::endl;
+//			std::cout << "y su sigmoide " << a[l+1][i] << std::endl;
 		}
-		std::cout << std::endl;
+//		std::cout << std::endl;
 	}
-	std::cout << std::endl;
+//	std::cout << std::endl;
 }
 
 //FUNCIONA? SIIIIII?
@@ -280,13 +305,14 @@ double NNMachine::cost(std::vector<double> thetas) {
 		h.push_back(a[this->L-1][0]);
 	}
 
-	for(int l = 0; l < h.size(); l++){
-		std::cout << h[l] << " ";
-	}
-	std::cout << std::endl;
+//	for(int l = 0; l < h.size(); l++){
+//		std::cout << h[l] << " ";
+//	}
+//	std::cout << std::endl;
 
 	//Calculo la J
 	for(int i=0; i<this->nSamples; i++){
+//		std::cout << "J suma y=" << y[i] << "*h=" << h[i] << std::endl;
 		J += (y[i]*std::log(h[i]))+((1-y[i])*log(1-h[i]));
 	}
 
@@ -352,6 +378,8 @@ void NNMachine::initTheta(){
 	std::vector<std::vector<double> > v2;
 	std::vector<double> v1;
 
+	srand(time(NULL));
+
 	for(int l = 0; l < L-1; l++){
 		v2.clear();
 
@@ -359,7 +387,11 @@ void NNMachine::initTheta(){
 			v1.clear();
 
 			for(int k = 0; k < s_l[l+1]; k++){
-				double random = rand() % 4 + 1;//Valor aleatorio de 1 a 4
+				double random = rand() % 18 -9;//Valor aleatorio de -9 a 9
+
+				if(random == 0){
+					random++;
+				}
 
 				v1.push_back(random);
 			}
