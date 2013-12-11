@@ -15,7 +15,7 @@
 #include "KVMachine.h"
 #include "LRMachine.h"
 #include "NNMachine.h"
-#include "SVMachine.h"
+#include "SVMachine/SVMachine.h"
 
 enum Machine {LogisticRegresion, KVecinos, neuralNetwork, SVM};
 

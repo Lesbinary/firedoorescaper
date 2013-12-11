@@ -21,7 +21,11 @@
 					<folderInfo id="org.eclipse.linuxtools.cdt.autotools.core.configuration.build.1981230645." name="/" resourcePath="">
 						<toolChain id="org.eclipse.linuxtools.cdt.autotools.core.toolChain.53774674" name="GNU Autotools Toolchain" superClass="org.eclipse.linuxtools.cdt.autotools.core.toolChain">
 							<targetPlatform id="org.eclipse.linuxtools.cdt.autotools.core.toolchain.targetPlatform.384023384" isAbstract="false" name="GNU Autotools Target Platform" superClass="org.eclipse.linuxtools.cdt.autotools.core.toolchain.targetPlatform"/>
-							<builder id="org.eclipse.linuxtools.cdt.autotools.core.toolchain.builder.436198718" superClass="org.eclipse.linuxtools.cdt.autotools.core.toolchain.builder"/>
+							<builder id="org.eclipse.linuxtools.cdt.autotools.core.toolchain.builder.436198718" keepEnvironmentInBuildfile="false" superClass="org.eclipse.linuxtools.cdt.autotools.core.toolchain.builder">
+								<outputEntries>
+									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name=""/>
+								</outputEntries>
+							</builder>
 							<tool id="org.eclipse.linuxtools.cdt.autotools.core.gnu.toolchain.tool.configure.1729856150" name="configure" superClass="org.eclipse.linuxtools.cdt.autotools.core.gnu.toolchain.tool.configure">
 								<option id="org.eclipse.linuxtools.cdt.autotools.core.option.configure.name.882143110" name="Name" superClass="org.eclipse.linuxtools.cdt.autotools.core.option.configure.name" value="org.eclipse.linuxtools.cdt.autotools.core.configuration.build.1981230645" valueType="string"/>
 							</tool>
@@ -29,11 +33,13 @@
 							<tool id="org.eclipse.linuxtools.cdt.autotools.core.toolchain.tool.gcc.485253909" name="GCC C Compiler" superClass="org.eclipse.linuxtools.cdt.autotools.core.toolchain.tool.gcc">
 								<option id="gnu.c.compiler.option.include.paths.210119496" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/include"/>
+									<listOptionValue builtIn="false" value="/usr/include/c++/4.8"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1748239043" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="org.eclipse.linuxtools.cdt.autotools.core.toolchain.tool.gpp.2027070779" name="GCC C++ Compiler" superClass="org.eclipse.linuxtools.cdt.autotools.core.toolchain.tool.gpp">
 								<option id="gnu.cpp.compiler.option.include.paths.730176654" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/usr/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/c++/4.8"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.587175095" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -41,8 +47,8 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="alglib" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="alglib"/>
+						<entry excluding="alglib|SVMachine" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="SVMachine"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
