@@ -8,8 +8,21 @@
 #include "SVMachine.h"
 
 SVMachine::SVMachine() {
-	// TODO Auto-generated constructor stub
+	kernel = new LinearKernel();
+	classifySuccesses = 0;
+	nFeatures = 0;
+}
 
+SVMachine::SVMachine(KernelType t) {
+	classifySuccesses = 0;
+	nFeatures = 0;
+	switch(t){
+	case Linear: kernel = new LinearKernel();
+		break;
+	case Polynomial: kernel = new PolynomialKernel(2);
+		break;
+	default: kernel = new LinearKernel();
+	}
 }
 
 SVMachine::~SVMachine() {
@@ -36,12 +49,17 @@ bool SVMachine::isReadyToCross() {
 }
 
 void SVMachine::classifySample(Sample sample) {
-	double p = 0.0;
-	for(int i=0; i<nFeatures+1; i++){
-		if(i==0)
-			p = theta.at(i);
-		else p += theta.at(i)*sample.input[i-1];
+	ET aux(0.0);
+	arma::Col<double> Input(sample.getNFeatures());
+	for(int i=0; i<sample.getNFeatures(); i++)
+		Input(i)=sample.input[i];
+	for(int i=0; i<trainingSet.size(); i++){
+		if(SupportVectors.at(i) > 0.0){
+			aux += ET(SupportVectors.at(i))*ET(y.at(i))*kernel->K(X.row(i).t(), Input);
+//			std::cout << "La suma auxiliar vale: " << aux+b << std::endl;
+		}
 	}
+	double p = CGAL::to_double(aux + b);
 	std::cout << "Para este sample tenemos una p de: " << p << std::endl;
 	if((p>1 && sample.burn) || (p<=-1 && !sample.burn)){
 		if(p>1)
@@ -54,7 +72,7 @@ void SVMachine::classifySample(Sample sample) {
 			std::cout << "Predigo que la siguiente puerta está encendida" << std::endl;
 		else if(p<-1) std::cout << "Predigo que la siguiente puerta está apagada" << std::endl;
 		std::cout << "Pinyico... volviendo a entrenar" << std::endl;
-		this->trainingSet.push_back(sample);
+//		this->trainingSet.push_back(sample);
 //		this->trainByQuadraticProgramming();
 		this->classifySuccesses--;
 	} else std::cout << "No se que carajo ha pasado" << std::endl;
@@ -62,18 +80,23 @@ void SVMachine::classifySample(Sample sample) {
 }
 
 bool SVMachine::isDoorOnFire(double input[]) {
-	double p = 0.0;
-	for(int i=0; i<nFeatures+1; i++){
-		if(i==0)
-			p = theta[i];
-		else p += theta[i]*input[i-1];
+	ET aux(0.0);
+	arma::Col<double> Input(nFeatures);
+	for(int i=0; i<nFeatures; i++)
+		Input(i)=input[i];
+	for(int i=0; i<trainingSet.size(); i++){
+		if(SupportVectors.at(i) > 0.0){
+			aux += ET(SupportVectors.at(i))*ET(y.at(i))*kernel->K(X.row(i).t(), Input);
+			std::cout << "La suma auxiliar vale: " << aux+b << std::endl;
+		}
 	}
-	// Esto no es probabilidad, es un copypasta de la LR, en este caso, lo que determina la clasificación es el signo
-	// La interpretación de esto es minuto 11 video 15
+	double p = CGAL::to_double(aux + b);
 	std::cout << "La probabilidad de que la siguiente puerta esté caliente es: " << p << std::endl;
-	if(p>3)
+	if(p>1)
 		return true;
-	else if(p<-3) return false;
+	else if(p<-1) return false;
+
+	return true;
 }
 
 void SVMachine::clearTrainingSet() {
@@ -89,7 +112,7 @@ void SVMachine::quadraticSolution() {
 	int m = 1; // Entiendo que es el numero de restricciones
 	Program qp (CGAL::EQUAL);
 	// Obtengo la X
-	arma::mat X = arma::mat(n, nFeatures);
+	X = arma::mat(n, nFeatures);
 	for(int i=0; i<n; i++){
 		for(int j=0; j<nFeatures; j++){
 			X(i,j)=trainingSet[i].input[j];
@@ -97,8 +120,8 @@ void SVMachine::quadraticSolution() {
 	}
 //	std::cout << X;
 	// Obtengo la Y
-	arma::mat y = arma::mat(n, 1);
-	for(int i=0; i<trainingSet.size(); i++){
+	y = arma::mat(n, 1);
+	for(int i=0; i<n; i++){
 		if(trainingSet[i].burn)
 			y(i)=1;
 		else y(i)=-1;
@@ -120,8 +143,11 @@ void SVMachine::quadraticSolution() {
 	// Seteo la symmetric positive-semidefinite matrix
 	for(int i=0; i<n; i++){
 		for(int j=0; j<=i; j++){
-			arma::mat aux = X.row(j)*X.row(i).t();
-			ET daux(arma::as_scalar(aux*y.at(i)*y.at(j)));
+			ET ip = kernel->K(X.row(i).t(),X.row(j).t());
+//			std::cout << "El kernel para " << i << "," << j << " nos dice que el innerproduct es: " << ip << std::endl;
+//			arma::mat aux = X.row(j)*X.row(i).t();
+//			std::cout << "El cálculo antiguo nos dice que el innerproduct es: " << aux << std::endl;
+			ET daux = ip*ET(y.at(i))*ET(y.at(j));
 //			std::cout << "El producto de " << i << "," << j << std::endl << aux;
 			qp.set_d(i,j,daux);
 //			std::cout << "La matriz auxiliar vale:" <<  daux << std::endl;
@@ -132,44 +158,52 @@ void SVMachine::quadraticSolution() {
 	Solution s = CGAL::solve_quadratic_program(qp, ET());
 	// print basic constraint indices (we know that there is only one: 1)
 	std::cout << "Y la solución es: " << s << std::endl;
-	arma::mat W = arma::mat(n,1);
+//	arma::mat W = arma::mat(n,1);
+	this->SupportVectors = arma::mat(n,1);
+	ET sumaB(0.0);
 	if (s.is_optimal()) { // we know that, don't we?
-		std::cout << "La solución es óptima\n";
 		int i = 0;
 		for (Solution::Variable_value_iterator it = s.variable_values_begin(); it != s.variable_values_end(); ++it){
-			double sv = CGAL::to_double(*it);
-			std::cout << sv << std::endl;
-			W(i) = sv;
+			this->SupportVectors(i) = CGAL::to_double(*it);
+			if(SupportVectors.at(i) != 0.0){
+				this->m = i; // Esto lo hago para obtener un sv que me resuelva la b
+			}
 			i++;
 		}
-		std::cout << std::endl;
-		arma::mat sum = arma::zeros(1,nFeatures);
-		std::cout << sum << std::endl;
-		int lastSV = 0;
-		for(int i=0; i<n; i++){
-			std::cout << "El valor para la fila " << i << " es: " << W.at(i)*y.at(i)*X.row(i) << std::endl;
-			// // Calculo la W
-			if(W.at(i) != 0.0){
-				arma::mat aux = W.at(i)*y.at(i)*X.row(i);
-				sum += aux;
-				std::cout << "El valor para la fila " << i << " es: " << sum << std::endl;
-				lastSV = i; // Esto lo hago para obtener un sv que me resuelva la b
-			}
-		}
-		std::cout << "El vector w es: " << sum;
-		double b = arma::as_scalar(sum*X.row(lastSV).t());
-		b = (1/y.at(lastSV) - b);
-		std::cout << "Y la b vale: " << b << std::endl;
-		this->theta = arma::mat(nFeatures+1, 1);
-		for(int i=0; i< nFeatures+1; i++){
-			if(i==0)
-				this->theta(i)=b;
-			else this->theta(i) = sum.at(i-1);
-		}
+		// Calculo la b
+		for(int i=0; i<n; i++)
+			if(SupportVectors.at(i) != 0.0)
+				sumaB += ET(SupportVectors.at(i))*ET(y.at(i))*kernel->K(X.row(i).t(), X.row(this->m).t());
+		this->b = ET(y(this->m)) - sumaB;
+		std::cout << "Y el valor de b es: "<< this->b << std::endl;
+//		W = arma::zeros(1,nFeatures);
+//		std::cout << sum << std::endl;
+//		int lastSV = 0;
+//		for(int i=0; i<n; i++){
+//			std::cout << "El valor para la fila " << i << " es: " << SupportVectors.at(i)*y.at(i)*X.row(i) << std::endl;
+//			// // Calculo la W
+//			if(SupportVectors.at(i) != 0.0){
+//				arma::mat aux = SupportVectors.at(i)*y.at(i)*X.row(i);
+//				W += aux;
+//				std::cout << "El valor para la fila " << i << " es: " << sum << std::endl;
+//				lastSV = i; // Esto lo hago para obtener un sv que me resuelva la b
+//			}
+//		}
+//		std::cout << "El vector w es: " << sum;
+//		double b = arma::as_scalar(sum*X.row(lastSV).t());
+//		b = (1/y.at(lastSV) - b);
+//		std::cout << "Y la b vale: " << b << std::endl;
+////		this->theta = arma::mat(nFeatures+1, 1);
+//		for(int i=0; i< nFeatures+1; i++){
+//			if(i==0)
+//				this->theta(i)=b;
+//			else this->theta(i) = sum.at(i-1);
+//		}
 	} else std::cout << "No es optima, vete tu a saber por qué...\n";
 }
 
 void SVMachine::trainByQuadraticProgramming() {
-	quadraticSolution();
+	quadraticSolution(); // Esto me da los Support Vectors
+
 }
 

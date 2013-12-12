@@ -9,10 +9,12 @@
 #define IKERNEL_H_
 
 #include "armadillo"
+#include <CGAL/MP_Float.h>
 
 class IKernel{
 public:
-	virtual void K(arma::mat X, arma::mat X2) = 0;
+	virtual CGAL::MP_Float K(arma::vec X, arma::vec X2) = 0;
+
 };
 
 

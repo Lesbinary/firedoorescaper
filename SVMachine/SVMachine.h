@@ -16,31 +16,25 @@
 #include <CGAL/QP_models.h>
 #include <CGAL/QP_functions.h>
 #include "armadillo"
+#include "LinearKernel.h"
+#include "PolynomialKernel.h"
+#include "IKernel.h"
 
 typedef std::vector<Sample> VSample;
-
 typedef CGAL::MP_Float ET;
-
-//// program and solution types
-//typedef CGAL::Quadratic_program_from_iterators
-//<int**, // for A
-//int*, // for b
-//CGAL::Const_oneset_iterator<CGAL::Comparison_result>, // for r
-//bool*, // for fl
-//int*, // for l
-//bool*, // for fu
-//int*, // for u
-//double**, // for D
-//int*> // for c
-//Program;
-//typedef CGAL::Quadratic_program_solution<ET> Solution;
-
+typedef arma::Mat<ET> mat;
 typedef CGAL::Quadratic_program<ET> Program;
 typedef CGAL::Quadratic_program_solution<ET> Solution;
+enum KernelType {Linear, Polynomial};
 
 class SVMachine: public IMachine {
 public:
+
+
 	SVMachine();
+
+	SVMachine(KernelType t);
+
 	virtual ~SVMachine();
 
 	void addTrainingSample(Sample sample);
@@ -55,7 +49,12 @@ private:
 	VSample trainingSet;
 	int classifySuccesses;
 	int nFeatures;
-	arma::mat theta;
+	int m; // Un Suppor Vector
+	arma::mat y;
+	arma::mat X;
+	arma::mat SupportVectors;
+	ET b;
+	IKernel* kernel;
 
 	void quadraticSolution();
 	void trainByQuadraticProgramming();
