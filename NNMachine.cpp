@@ -365,19 +365,26 @@ void NNMachine::scalation(){
 		for(int j = 0; j < trainingSet[i].input.size(); j++){
 			double num = trainingSet[i].input[j];
 
+			std::cout << "Este es " << num << std::endl;
+
 			if(num < 0){
 				num *= -1.0;
 			}
 
 			if(num > absolMax){
+				std::cout << "Es mayor" << std::endl;
 				absolMax = num;
 			}
 		}
 	}
 
-	//Y AHORA ALGO CON NUM
+	std::cout << "El mayor en valor absoluto es " << absolMax << std::endl;
 
-	//CHAAANANAANANANANANAAAAAA
+	for(int i = 0; i < trainingSet.size(); i++){
+		for(int j = 0; j < trainingSet[i].input.size(); j++){
+			trainingSet[i].input[j] /= absolMax;
+		}
+	}
 }
 
 //FUNCIONA
