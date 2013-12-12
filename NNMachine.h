@@ -54,6 +54,7 @@ public:
 		int hiddenLayerSize;
 		int outputLayerSize;
 
+		void scalation();
 		void backPropagation();
 		void forwardPropagation(std::vector<double> theta);
 		double cost(std::vector<double> thetas);

@@ -7,6 +7,8 @@
 
 #include "NNMachine.h"
 #include "Utils.h"
+#include "include/crandomgenerator.h"
+#include "float.h"
 
 //A falta de completar
 NNMachine::NNMachine() {
@@ -259,18 +261,18 @@ void NNMachine::forwardPropagation(std::vector<double> theta){
 	for(int l = 0; l < this->L-1; l++){
 		for(int i = 0; i<this->s_l[l+1]; i++){
 			for(int j = 0; j < this->s_l[l]; j++){
-//				std::cout << "La anterior es " << a[l][j];
-//				std::cout << ", la theta " << Utils::getElement(theta,this->s_l,l,j,i);
+				std::cout << "La anterior es " << a[l][j];
+				std::cout << ", la theta " << Utils::getElement(theta,this->s_l,l,j,i);
 				a[l+1][i] += Utils::getElement(theta,this->s_l,l,j,i)*a[l][j];
-//				std::cout << ", la siguiente " << a[l+1][i] << std::endl;
+				std::cout << ", la siguiente " << a[l+1][i] << std::endl;
 			}
 
 			a[l+1][i] = sigmoid(a[l+1][i]);
-//			std::cout << "y su sigmoide " << a[l+1][i] << std::endl;
+			std::cout << "y su sigmoide " << a[l+1][i] << std::endl;
 		}
-//		std::cout << std::endl;
+		std::cout << std::endl;
 	}
-//	std::cout << std::endl;
+	std::cout << std::endl;
 }
 
 //FUNCIONA? SIIIIII?
@@ -351,7 +353,31 @@ void NNMachine::train() {
 	//Inicialización del vector de a's
 	initA();
 
+	scalation();
+
 	backPropagation();
+}
+
+void NNMachine::scalation(){
+	double absolMax = DBL_MIN;
+
+	for(int i = 0; i < trainingSet.size(); i++){
+		for(int j = 0; j < trainingSet[i].input.size(); j++){
+			double num = trainingSet[i].input[j];
+
+			if(num < 0){
+				num *= -1.0;
+			}
+
+			if(num > absolMax){
+				absolMax = num;
+			}
+		}
+	}
+
+	//Y AHORA ALGO CON NUM
+
+	//CHAAANANAANANANANANAAAAAA
 }
 
 //FUNCIONA
@@ -387,7 +413,7 @@ void NNMachine::initTheta(){
 			v1.clear();
 
 			for(int k = 0; k < s_l[l+1]; k++){
-				double random = rand() % 18 -9;//Valor aleatorio de -9 a 9
+				double random = FireDoorEscaper::CRandomGenerator::CRNDGEN.uniformRandomDouble(-9,9);
 
 				if(random == 0){
 					random++;
