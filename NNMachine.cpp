@@ -8,7 +8,6 @@
 #include "NNMachine.h"
 #include "Utils.h"
 #include "include/crandomgenerator.h"
-#include "float.h"
 
 //A falta de completar
 NNMachine::NNMachine() {
@@ -63,9 +62,9 @@ void NNMachine::backPropagation(){
 	std::vector<std::vector<double> > v2;
 	std::vector<double> v1;
 
+	//Inicialización de upperDelta
 	std::vector<std::vector<std::vector<double> > > upperDelta;
 
-	//Inicialización de upperDelta
 	for(int l = 0; l < L-1; l++){
 		v2.clear();
 
@@ -99,9 +98,11 @@ void NNMachine::backPropagation(){
 	//Empieza el algoritmo
 	//Para cada muestra
 	for(int i = 0; i < this->nSamples; i++){
-		std::vector<std::vector<double> > lowerDelta;
+		std::cout << "Muestra " << i << std::endl;
 
 		//Inicialización de lowerDelta
+		std::vector<std::vector<double> > lowerDelta;
+
 		for(int l = 1; l < L; l++){
 			v1.clear();
 
@@ -112,11 +113,21 @@ void NNMachine::backPropagation(){
 			lowerDelta.push_back(v1);
 		}
 
-		std::cout << "Muestra " << i << std::endl;
+		//Inicializo las a's (con los bias)
 
 		initA();
 
-		a[0] = trainingSet[i].input;
+		//Asigno a la primera capa los valores de la capa de entrada
+		for(int j = 0; j < nFeatures; j++){
+			a[0][j+1] = trainingSet[i].input[j];
+		}
+
+		for(int j = 0; j < s_l.size(); j++){
+			for (int k = 0; k < s_l[j]; k++){
+				std::cout << a[j][k] << " " << std::endl;
+			}
+			std::cout << std::endl;
+		}
 
 		//Cálculo de a^(l) mediante forward propagation
 		forwardPropagation(thetas);
@@ -131,10 +142,14 @@ void NNMachine::backPropagation(){
 		//Cómputo de los demás lowerDelta^(l)
 		for(int l = L-3; l >=0; l--){//De atras adelante, por capas
 			for(int j = 0; j < s_l[l+1]; j++){//De adelante atras, por niveles
-				for(int k = 0; k < s_l[l+2]; k++){//todas las thetas
-					std::cout << "Con lowerDelta anterior " << lowerDelta[l+1][k] << " y theta " << Utils::getElement(thetas,s_l,l+1,j,k);
-					lowerDelta[l][j] += Utils::getElement(thetas,s_l,l+1,j,k)*lowerDelta[l+1][k];//puede que me haya liado con los índices
-					std::cout << " la siguiente es " << lowerDelta[l][j] << std::endl;
+				if(j != 0){
+					for(int k = 0; k < s_l[l+2]; k++){//todas las thetas
+						if(k != 0){
+							std::cout << "Con lowerDelta anterior " << lowerDelta[l+1][k] << " y theta " << Utils::getElement(thetas,s_l,l+1,j,k);
+							lowerDelta[l][j] += Utils::getElement(thetas,s_l,l+1,j,k)*lowerDelta[l+1][k];//puede que me haya liado con los índices
+							std::cout << " la siguiente es " << lowerDelta[l][j] << std::endl;
+						}
+					}
 				}
 			}
 		}
@@ -260,15 +275,17 @@ void NNMachine::forwardPropagation(std::vector<double> theta){
 
 	for(int l = 0; l < this->L-1; l++){
 		for(int i = 0; i<this->s_l[l+1]; i++){
-			for(int j = 0; j < this->s_l[l]; j++){
-				std::cout << "La anterior es " << a[l][j];
-				std::cout << ", la theta " << Utils::getElement(theta,this->s_l,l,j,i);
-				a[l+1][i] += Utils::getElement(theta,this->s_l,l,j,i)*a[l][j];
-				std::cout << ", la siguiente " << a[l+1][i] << std::endl;
-			}
+			if(i != 0 || l == L-2){
+				for(int j = 0; j < this->s_l[l]; j++){
+					std::cout << "La anterior es " << a[l][j];
+					std::cout << ", la theta " << Utils::getElement(theta,this->s_l,l,j,i);
+					a[l+1][i] += Utils::getElement(theta,this->s_l,l,j,i)*a[l][j];
+					std::cout << ", la siguiente " << a[l+1][i] << std::endl;
+				}
 
-			a[l+1][i] = sigmoid(a[l+1][i]);
-			std::cout << "y su sigmoide " << a[l+1][i] << std::endl;
+				a[l+1][i] = sigmoid(a[l+1][i]);
+				std::cout << "y su sigmoide " << a[l+1][i] << std::endl;
+			}
 		}
 		std::cout << std::endl;
 	}
@@ -340,51 +357,22 @@ void NNMachine::train() {
 
 	//Inicializamos el vector de tamaños de la red neuronal según el tamaño del vector de entrada
 	//Lo de que son 4 capas y la ultima es de tamaño 1 lo hardcodeamos aqui
-	s_l.push_back(nFeatures);
+	s_l.push_back(nFeatures+1);
 	s_l.push_back(nFeatures+1);
 	s_l.push_back(nFeatures+1);
 	s_l.push_back(1);
 
 	L = s_l.size();
 
-	//Random Initialization del vector de pesos Thetas (que es 3)
+	//Random Initialization del vector de pesos Thetas
 	initTheta();
 
 	//Inicialización del vector de a's
 	initA();
 
-	scalation();
+	Utils::scalation(trainingSet);
 
 	backPropagation();
-}
-
-void NNMachine::scalation(){
-	double absolMax = DBL_MIN;
-
-	for(int i = 0; i < trainingSet.size(); i++){
-		for(int j = 0; j < trainingSet[i].input.size(); j++){
-			double num = trainingSet[i].input[j];
-
-			std::cout << "Este es " << num << std::endl;
-
-			if(num < 0){
-				num *= -1.0;
-			}
-
-			if(num > absolMax){
-				std::cout << "Es mayor" << std::endl;
-				absolMax = num;
-			}
-		}
-	}
-
-	std::cout << "El mayor en valor absoluto es " << absolMax << std::endl;
-
-	for(int i = 0; i < trainingSet.size(); i++){
-		for(int j = 0; j < trainingSet[i].input.size(); j++){
-			trainingSet[i].input[j] /= absolMax;
-		}
-	}
 }
 
 //FUNCIONA
@@ -397,7 +385,11 @@ void NNMachine::initA(){
 		v1.clear();
 
 		for(int j = 0; j < s_l[l]; j++){//De adelante atras, por niveles
-			v1.push_back(0.0);
+			if(j == 0 && l != L-1) {
+				v1.push_back(1.0);
+			} else {
+				v1.push_back(0.0);
+			}
 		}
 
 		a.push_back(v1);
