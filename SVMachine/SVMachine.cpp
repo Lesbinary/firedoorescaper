@@ -21,6 +21,8 @@ SVMachine::SVMachine(KernelType t) {
 		break;
 	case Polynomial: kernel = new PolynomialKernel(2);
 		break;
+	case RBF: kernel = new RBFKernel();
+		break;
 	default: kernel = new LinearKernel();
 	}
 }
@@ -144,9 +146,7 @@ void SVMachine::quadraticSolution() {
 	for(int i=0; i<n; i++){
 		for(int j=0; j<=i; j++){
 			ET ip = kernel->K(X.row(i).t(),X.row(j).t());
-//			std::cout << "El kernel para " << i << "," << j << " nos dice que el innerproduct es: " << ip << std::endl;
-//			arma::mat aux = X.row(j)*X.row(i).t();
-//			std::cout << "El cálculo antiguo nos dice que el innerproduct es: " << aux << std::endl;
+			std::cout << "El kernel para " << i << "," << j << " nos dice que el innerproduct es: " << ip << std::endl;
 			ET daux = ip*ET(y.at(i))*ET(y.at(j));
 //			std::cout << "El producto de " << i << "," << j << std::endl << aux;
 			qp.set_d(i,j,daux);
@@ -176,30 +176,9 @@ void SVMachine::quadraticSolution() {
 				sumaB += ET(SupportVectors.at(i))*ET(y.at(i))*kernel->K(X.row(i).t(), X.row(this->m).t());
 		this->b = ET(y(this->m)) - sumaB;
 		std::cout << "Y el valor de b es: "<< this->b << std::endl;
-//		W = arma::zeros(1,nFeatures);
-//		std::cout << sum << std::endl;
-//		int lastSV = 0;
-//		for(int i=0; i<n; i++){
-//			std::cout << "El valor para la fila " << i << " es: " << SupportVectors.at(i)*y.at(i)*X.row(i) << std::endl;
-//			// // Calculo la W
-//			if(SupportVectors.at(i) != 0.0){
-//				arma::mat aux = SupportVectors.at(i)*y.at(i)*X.row(i);
-//				W += aux;
-//				std::cout << "El valor para la fila " << i << " es: " << sum << std::endl;
-//				lastSV = i; // Esto lo hago para obtener un sv que me resuelva la b
-//			}
-//		}
-//		std::cout << "El vector w es: " << sum;
-//		double b = arma::as_scalar(sum*X.row(lastSV).t());
-//		b = (1/y.at(lastSV) - b);
-//		std::cout << "Y la b vale: " << b << std::endl;
-////		this->theta = arma::mat(nFeatures+1, 1);
-//		for(int i=0; i< nFeatures+1; i++){
-//			if(i==0)
-//				this->theta(i)=b;
-//			else this->theta(i) = sum.at(i-1);
-//		}
 	} else std::cout << "No es optima, vete tu a saber por qué...\n";
+
+	int pausa; std::cin >> pausa;
 }
 
 void SVMachine::trainByQuadraticProgramming() {

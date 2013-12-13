@@ -16,16 +16,17 @@
 #include <CGAL/QP_models.h>
 #include <CGAL/QP_functions.h>
 #include "armadillo"
+#include "IKernel.h"
 #include "LinearKernel.h"
 #include "PolynomialKernel.h"
-#include "IKernel.h"
+#include "RBFKernel.h"
 
 typedef std::vector<Sample> VSample;
 typedef CGAL::MP_Float ET;
 typedef arma::Mat<ET> mat;
 typedef CGAL::Quadratic_program<ET> Program;
 typedef CGAL::Quadratic_program_solution<ET> Solution;
-enum KernelType {Linear, Polynomial};
+enum KernelType {Linear, Polynomial, RBF};
 
 class SVMachine: public IMachine {
 public:
