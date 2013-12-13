@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include "float.h"
 
 class Utils{
 public:
@@ -44,6 +45,34 @@ public:
 			myfile << x[i] << " " << y[i] << std::endl;
 		myfile.close();
 		system("gnuplot -persist -e \"plot './datafile.dat' using 1:2 title 'X' with linespoints, './datafile.dat' using 1:2 title 'Y' with points\"");
+	}
+
+	static void doShit(){
+
+	}
+
+	static void scalation(std::vector<Sample> &trainingSet){
+		double absolMax = DBL_MIN;
+
+		for(int i = 0; i < trainingSet.size(); i++){
+			for(int j = 0; j < trainingSet[i].input.size(); j++){
+				double num = trainingSet[i].input[j];
+
+				if(num < 0){
+					num *= -1.0;
+				}
+
+				if(num > absolMax){
+					absolMax = num;
+				}
+			}
+		}
+
+		for(int i = 0; i < trainingSet.size(); i++){
+			for(int j = 0; j < trainingSet[i].input.size(); j++){
+				trainingSet[i].input[j] /= absolMax;
+			}
+		}
 	}
 };
 
