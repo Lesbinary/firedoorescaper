@@ -5,6 +5,7 @@
  *      Author: alvaro
  */
 
+#include <cmath>
 #include "NNMachine.h"
 #include "Utils.h"
 #include "include/crandomgenerator.h"
@@ -122,13 +123,6 @@ void NNMachine::backPropagation(){
 			a[0][j+1] = trainingSet[i].input[j];
 		}
 
-		for(int j = 0; j < s_l.size(); j++){
-			for (int k = 0; k < s_l[j]; k++){
-				std::cout << a[j][k] << " " << std::endl;
-			}
-			std::cout << std::endl;
-		}
-
 		//Cálculo de a^(l) mediante forward propagation
 		forwardPropagation(thetas);
 
@@ -144,7 +138,7 @@ void NNMachine::backPropagation(){
 			for(int j = 0; j < s_l[l+1]; j++){//De adelante atras, por niveles
 				if(j != 0){
 					for(int k = 0; k < s_l[l+2]; k++){//todas las thetas
-						if(k != 0){
+						if(k != 0 || l == L-3){
 							std::cout << "Con lowerDelta anterior " << lowerDelta[l+1][k] << " y theta " << Utils::getElement(thetas,s_l,l+1,j,k);
 							lowerDelta[l][j] += Utils::getElement(thetas,s_l,l+1,j,k)*lowerDelta[l+1][k];//puede que me haya liado con los índices
 							std::cout << " la siguiente es " << lowerDelta[l][j] << std::endl;
@@ -184,8 +178,7 @@ void NNMachine::backPropagation(){
 	for(int l = 0; l < L-1; l++){
 		for(int j = 0; j < s_l[l]; j++){
 			for(int k = 0; k < s_l[l+1]; k++){
-				std::cout << l << " " << j << " " << k << std::endl;
-				std::cout << upperDelta[l][j][k] << " " << std::endl;
+				std::cout << upperDelta[l][j][k] << " ";
 			}
 			std::cout << std::endl;
 		}
@@ -198,8 +191,17 @@ void NNMachine::backPropagation(){
 	//Cálculo de la D : igualmente simple
 	for(int l = 0; l < L-1; l++){
 		for(int j = 0; j < s_l[l]; j++){
-			for(int k = 0; k < s_l[l+1]; k++){
-				D.push_back(upperDelta[l][j][k]/this->y.size());
+			if(j ==0){
+				for(int k = 0; k < s_l[l+1]; k++){
+					D.push_back(upperDelta[l][j][k]/this->y.size());
+				}
+			} else {
+				for(int k = 0; k < s_l[l+1]; k++){
+					double res = upperDelta[l][j][k]/this->y.size();
+					res += (lambda*Utils::getElement(thetas,s_l,l,j,k));
+
+					D.push_back(res);
+				}
 			}
 		}
 	}
@@ -335,7 +337,23 @@ double NNMachine::cost(std::vector<double> thetas) {
 		J += (y[i]*std::log(h[i]))+((1-y[i])*log(1-h[i]));
 	}
 
-	return -J/this->nSamples;
+	J /= (-this->nSamples);
+
+	double R = 0.0;
+
+	for(int l = 0; l < L-2; l++){
+		for(int j = 0; j < s_l[l]; j++){
+			for(int k = 0; k < s_l[l+1]; k++){
+				R += pow(Utils::getElement(thetas,s_l,l,j,k),2);
+			}
+		}
+	}
+
+	R *= lambda;
+	R /= (2*this->nSamples);
+
+
+	return J+R;
 }
 
 //FUNCIONA
@@ -345,6 +363,8 @@ double NNMachine::sigmoid(double z) {
 }
 
 void NNMachine::train() {
+	lambda = 1.0;
+
 	std::cout << "Empieza el entrenamiento" << std::endl;
 
 	nFeatures = trainingSet[0].getNFeatures();
