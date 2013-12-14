@@ -54,6 +54,9 @@ public:
 		int hiddenLayerSize;
 		int outputLayerSize;
 
+	//Valor para la regularizacion
+		double lambda;
+
 		void backPropagation();
 		void forwardPropagation(std::vector<double> theta);
 		double cost(std::vector<double> thetas);
