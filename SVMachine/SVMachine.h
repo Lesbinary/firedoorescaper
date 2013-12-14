@@ -16,6 +16,7 @@
 #include <CGAL/QP_models.h>
 #include <CGAL/QP_functions.h>
 #include "armadillo"
+#include "../Utils.h"
 #include "IKernel.h"
 #include "LinearKernel.h"
 #include "PolynomialKernel.h"

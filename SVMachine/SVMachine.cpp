@@ -63,16 +63,16 @@ void SVMachine::classifySample(Sample sample) {
 	}
 	double p = CGAL::to_double(aux + b);
 	std::cout << "Para este sample tenemos una p de: " << p << std::endl;
-	if((p>1 && sample.burn) || (p<=-1 && !sample.burn)){
-		if(p>1)
+	if((p>0 && sample.burn) || (p<=-1 && !sample.burn)){
+		if(p>0)
 			std::cout << "Predigo que la siguiente puerta está encendida" << std::endl;
-		else if(p<-1) std::cout << "Predigo que la siguiente puerta está apagada" << std::endl;
+		else if(p<-0) std::cout << "Predigo que la siguiente puerta está apagada" << std::endl;
 		std::cout << "Ha clasificao de puta madre" << std::endl;
 		this->classifySuccesses++;
-	} else if ((p<=-1 && sample.burn) || (p>1 && !sample.burn)){
-		if(p>1)
+	} else if ((p<=-0 && sample.burn) || (p>0 && !sample.burn)){
+		if(p>0)
 			std::cout << "Predigo que la siguiente puerta está encendida" << std::endl;
-		else if(p<-1) std::cout << "Predigo que la siguiente puerta está apagada" << std::endl;
+		else if(p<0) std::cout << "Predigo que la siguiente puerta está apagada" << std::endl;
 		std::cout << "Pinyico... volviendo a entrenar" << std::endl;
 //		this->trainingSet.push_back(sample);
 //		this->trainByQuadraticProgramming();
@@ -114,6 +114,7 @@ void SVMachine::quadraticSolution() {
 	int m = 1; // Entiendo que es el numero de restricciones
 	Program qp (CGAL::EQUAL);
 	// Obtengo la X
+//	Utils::scalation(trainingSet); // Escalado de parámetros
 	X = arma::mat(n, nFeatures);
 	for(int i=0; i<n; i++){
 		for(int j=0; j<nFeatures; j++){
@@ -146,9 +147,9 @@ void SVMachine::quadraticSolution() {
 	for(int i=0; i<n; i++){
 		for(int j=0; j<=i; j++){
 			ET ip = kernel->K(X.row(i).t(),X.row(j).t());
-			std::cout << "El kernel para " << i << "," << j << " nos dice que el innerproduct es: " << ip << std::endl;
+//			std::cout << "El kernel para " << i << "," << j << " nos dice que el innerproduct es: " << ip << std::endl;
 			ET daux = ip*ET(y.at(i))*ET(y.at(j));
-//			std::cout << "El producto de " << i << "," << j << std::endl << aux;
+//			std::cout << "El producto de " << i << "," << j << ": " << daux << std::endl;
 			qp.set_d(i,j,daux);
 //			std::cout << "La matriz auxiliar vale:" <<  daux << std::endl;
 		}

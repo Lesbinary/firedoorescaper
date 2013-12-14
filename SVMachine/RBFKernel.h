@@ -20,8 +20,8 @@ public:
 private:
 	double sigma;
 
-	double computeGamma();
-	double squaredEuclidean(arma::vec X1, arma::vec X2);
+	CGAL::MP_Float computeGamma();
+	CGAL::MP_Float squaredEuclidean(arma::vec X1, arma::vec X2);
 };
 
 #endif /* RBFKERNEL_H_ */
