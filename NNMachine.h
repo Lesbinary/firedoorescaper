@@ -40,19 +40,9 @@ public:
 
 		std::vector<Sample> trainingSet; //Conjunto de samples para el entrenamiento
 		//std::vector<double> inputLayer;
-		std::vector<std::vector<std::vector<double> > > thetas; //Una matriz para cada hidden layer. Mínimo 2
-		std::vector<std::vector<double> > a; //En esta matriz se almacenarán los valores calculados de las diferentes capas ocultas (en el ejemplo, 1)
-		//std::vector<double> outputLayer; //tamaño variable, en nuestro problema sera 1 solo
-
-	//Deberemos tener un esquema pensado para la red, con un nº X de nodos en la hidden layer
-
-	//Variables para las ecuaciones
+		std::vector<std::vector<std::vector<double> > > thetas; //L-1 matrices
+		std::vector<std::vector<double> > a; //Creo que el nombre es bastante descriptivo
 		std::vector<double> y;//Outputs de los samples
-
-	//Estas variables sirven para inicializar los vectores (después usaremos el size())
-		int inputLayerSize;
-		int hiddenLayerSize;
-		int outputLayerSize;
 
 	//Valor para la regularizacion
 		double lambda;

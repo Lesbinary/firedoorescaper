@@ -66,10 +66,6 @@ public:
 
 	}
 
-	static void doShit(){
-
-	}
-
 	static void scalation(std::vector<Sample> &trainingSet){
 		double absolMax = DBL_MIN;
 
