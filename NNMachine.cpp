@@ -72,12 +72,21 @@ void NNMachine::backPropagation(){
 		for(int j = 0; j < s_l[l]; j++){
 			v1.clear();
 
-			for(int k = 0; k < s_l[l+1]; k++){
+			int num = s_l[l+1];
+
+			if(l != L-2){
+				num--;
+			}
+
+			for(int k = 0; k < num; k++){
+				std::cout << "0 ";
 				v1.push_back(0.0);
 			}
+			std::cout << std::endl;
 
 			v2.push_back(v1);
 		}
+		std::cout << std::endl;
 
 		upperDelta.push_back(v2);
 	}
@@ -87,9 +96,16 @@ void NNMachine::backPropagation(){
 
 	for(int l = 0; l < this->L-1; l++){
 		for(int j = 0; j < this->s_l[l]; j++){
-			for(int k = 0; k < this->s_l[l+1]; k++){
-				std::cout << this->thetas[l][j][k] << " ";
-				thetas.push_back(this->thetas[l][j][k]);
+			if(l == L-2){
+				for(int k = 0; k < this->s_l[l+1]; k++){
+					std::cout << this->thetas[l][j][k] << " ";
+					thetas.push_back(this->thetas[l][j][k]);
+				}
+			} else {
+				for(int k = 0; k < this->s_l[l+1]-1; k++){
+					std::cout << this->thetas[l][j][k] << " ";
+					thetas.push_back(this->thetas[l][j][k]);
+				}
 			}
 			std::cout << std::endl;
 		}
@@ -107,9 +123,18 @@ void NNMachine::backPropagation(){
 		for(int l = 1; l < L; l++){
 			v1.clear();
 
-			for(int j = 0; j < s_l[l]; j++){
+			int num = s_l[l];
+
+			if(l != L-1){
+				num--;
+			}
+
+			for(int j = 0; j < num; j++){
+				std::cout << "0 ";
 				v1.push_back(0.0);
 			}
+
+			std::cout << std::endl;
 
 			lowerDelta.push_back(v1);
 		}
@@ -134,26 +159,35 @@ void NNMachine::backPropagation(){
 		std::cout << "El error final es " << lowerDelta[L-2][0] << std::endl;
 
 		//Cómputo de los demás lowerDelta^(l)
-		for(int l = L-3; l >=0; l--){//De atras adelante, por capas
-			for(int j = 0; j < s_l[l+1]; j++){//De adelante atras, por niveles
-				if(j != 0){
-					for(int k = 0; k < s_l[l+2]; k++){//todas las thetas
-						if(k != 0 || l == L-3){
-							std::cout << "Con lowerDelta anterior " << lowerDelta[l+1][k] << " y theta " << Utils::getElement(thetas,s_l,l+1,j,k);
-							lowerDelta[l][j] += Utils::getElement(thetas,s_l,l+1,j,k)*lowerDelta[l+1][k];//puede que me haya liado con los índices
-							std::cout << " la siguiente es " << lowerDelta[l][j] << std::endl;
-						}
-					}
+		for(int l = L-3; l >=0; l--){
+			for(int j = 0; j < s_l[l+1]-1; j++){
+
+				int num = s_l[l+2];
+
+				if(l != L-3){
+					num--;
+				}
+
+				for(int k = 0; k < num; k++){
+					std::cout << "Con lowerDelta anterior " << lowerDelta[l+1][k];
+					std::cout << " y theta " << Utils::getElement(thetas,s_l,l+1,j+1,k);
+					lowerDelta[l][j] += Utils::getElement(thetas,s_l,l+1,j+1,k)*lowerDelta[l+1][k];
+					std::cout << " la siguiente es " << lowerDelta[l][j] << std::endl;
 				}
 			}
 		}
 
-		std::cout << "lowerDelta es ";
+		std::cout << "lowerDelta es " << std::endl;
 
 		for(int l = 0; l < L-1; l++){
-			for(int j = 0; j < s_l[l+1]; j++){
+			int num = s_l[l+1];
+			if(l != L-2){
+				num--;
+			}
+			for(int j = 0; j < num; j++){
 				std::cout << lowerDelta[l][j] << " ";
 			}
+			std::cout << std::endl;
 		}
 		std::cout << std::endl;
 
@@ -161,10 +195,17 @@ void NNMachine::backPropagation(){
 		//Cálculo de upperDelta: es muy simple, suponemos que va
 		for(int l = 0; l < L-1; l++){
 			for(int j = 0; j < s_l[l]; j++){
-				for(int k = 0; k < s_l[l+1]; k++){
+				int num = s_l[l+1];
+
+				if(l != L-2){
+					num--;
+				}
+
+				for(int k = 0; k < num; k++){
 					upperDelta[l][j][k] += a[l][j]*lowerDelta[l][k];
 					std::cout << a[l][j]*lowerDelta[l][k] << " ";
 				}
+
 				std::cout << std::endl;
 			}
 			std::cout << std::endl;
@@ -262,23 +303,10 @@ void NNMachine::backPropagation(){
 
 //FUNCIONA
 void NNMachine::forwardPropagation(std::vector<double> theta){
-//	std::cout << "Dentro del fP" << std::endl;
-//
-//	for(int l = 0; l < this->L-1; l++){
-//		for(int i = 0; i<this->s_l[l]; i++){
-//			for(int j = 0; j < this->s_l[l+1]; j++){
-//				std::cout << l << " " << i << " " << j << std::endl;
-//				std::cout << Utils::getElement(theta,this->s_l,l,i,j) << " " << std::endl;
-//			}
-//			std::cout << std::endl;
-//		}
-//		std::cout << std::endl;
-//	}
-
-	for(int l = 0; l < this->L-1; l++){
-		for(int i = 0; i<this->s_l[l+1]; i++){
-			if(i != 0 || l == L-2){
-				for(int j = 0; j < this->s_l[l]; j++){
+	for(int l = 0; l < L-1; l++){
+		for(int i = 0; i<s_l[l+1]; i++){
+			if(l == L-2){
+				for(int j = 0; j < s_l[l]; j++){
 					std::cout << "La anterior es " << a[l][j];
 					std::cout << ", la theta " << Utils::getElement(theta,this->s_l,l,j,i);
 					a[l+1][i] += Utils::getElement(theta,this->s_l,l,j,i)*a[l][j];
@@ -286,15 +314,31 @@ void NNMachine::forwardPropagation(std::vector<double> theta){
 				}
 
 				a[l+1][i] = sigmoid(a[l+1][i]);
+
 				std::cout << "y su sigmoide " << a[l+1][i] << std::endl;
+			} else {
+				if(i != 0){
+					for(int j = 0; j < s_l[l]; j++){
+						std::cout << "La anterior es " << a[l][j];
+						std::cout << ", la theta " << Utils::getElement(theta,this->s_l,l,j,i-1);
+						a[l+1][i] += Utils::getElement(theta,this->s_l,l,j,i-1)*a[l][j];
+						std::cout << ", la siguiente " << a[l+1][i] << std::endl;
+					}
+
+					a[l+1][i] = sigmoid(a[l+1][i]);
+
+					std::cout << "y su sigmoide " << a[l+1][i] << std::endl;
+				}
 			}
 		}
+
 		std::cout << std::endl;
 	}
+
 	std::cout << std::endl;
 }
 
-//FUNCIONA? SIIIIII?
+//FUNCIONA
 double NNMachine::cost(std::vector<double> thetas) {
 	//Voy a hacer la ecuación tal cual está en las Lectures y las diapositivas de Andrew, no en los ejercicios
 
@@ -387,9 +431,6 @@ void NNMachine::train() {
 	//Random Initialization del vector de pesos Thetas
 	initTheta();
 
-	//Inicialización del vector de a's
-	initA();
-
 	Utils::scalation(trainingSet);
 
 	backPropagation();
@@ -406,11 +447,14 @@ void NNMachine::initA(){
 
 		for(int j = 0; j < s_l[l]; j++){//De adelante atras, por niveles
 			if(j == 0 && l != L-1) {
+				std::cout << "1 ";
 				v1.push_back(1.0);
 			} else {
+				std::cout << "0 ";
 				v1.push_back(0.0);
 			}
 		}
+		std::cout << std::endl;
 
 		a.push_back(v1);
 	}
@@ -431,7 +475,13 @@ void NNMachine::initTheta(){
 		for(int j = 0; j < s_l[l]; j++){
 			v1.clear();
 
-			for(int k = 0; k < s_l[l+1]; k++){
+			int num = s_l[l+1];
+
+			if(l != L-2){
+				num--;
+			}
+
+			for(int k = 0; k < num; k++){
 				double random = FireDoorEscaper::CRandomGenerator::CRNDGEN.uniformRandomDouble(-9,9);
 
 				if(random == 0){
