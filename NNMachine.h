@@ -47,7 +47,7 @@ public:
 	//Valor para la regularizacion
 		double lambda;
 
-		void backPropagation();
+		double backPropagation();
 		void forwardPropagation(std::vector<double> theta);
 		double cost(std::vector<double> thetas);
 		double sigmoid(double z);
