@@ -147,15 +147,15 @@ main(int argvc, char *argv[]) {
 
     std::cout << "Yeah!" << std::endl;
 
-    game->setGameDifficultyMode(CGame::GDM_SAMELEVEL);
+    game->setGameDifficultyMode(CGame::GDM_LEVELUP);
     // Main loop: stay will the game is on (i.e. the player is alive)
     std::cout << "Empezamos el juego: " << std::endl;
     while (game->getGameStatus() == CGame::GS_PLAYING) {
     	machine->clearTrainingSet();
-    	if(game->getDoorsPassed() + 1 > minDoorsToNextLevel){
-    		int cLevel = game->getLevel();
-    		game = new CGame(cLevel+1);
-    	}
+//    	if(game->getDoorsPassed() + 1 > minDoorsToNextLevel){
+//    		int cLevel = game->getLevel();
+//    		game = new CGame(cLevel+1);
+//    	}
 
         const CFireDoor& fd = game->getCurrentFireDoor();
         //printGameStatus(*game);

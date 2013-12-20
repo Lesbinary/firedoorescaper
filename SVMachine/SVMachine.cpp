@@ -19,7 +19,7 @@ SVMachine::SVMachine(KernelType t) {
 	switch(t){
 	case Linear: kernel = new LinearKernel();
 		break;
-	case Polynomial: kernel = new PolynomialKernel(2);
+	case Polynomial: kernel = new PolynomialKernel(4);
 		break;
 	case RBF: kernel = new RBFKernel();
 		break;
@@ -52,9 +52,14 @@ bool SVMachine::isReadyToCross() {
 
 void SVMachine::classifySample(Sample sample) {
 	ET aux(0.0);
+	// Hago esto provisional para escalar
+	std::vector<double> entradaScalada;
+	std::vector<Sample> sInput;
+	sInput.push_back(sample);
+	Utils::scalation(sInput);
 	arma::Col<double> Input(sample.getNFeatures());
 	for(int i=0; i<sample.getNFeatures(); i++)
-		Input(i)=sample.input[i];
+		Input(i)=sInput[0].input[i];
 	for(int i=0; i<trainingSet.size(); i++){
 		if(SupportVectors.at(i) > 0.0){
 			aux += ET(SupportVectors.at(i))*ET(y.at(i))*kernel->K(X.row(i).t(), Input);
@@ -66,10 +71,10 @@ void SVMachine::classifySample(Sample sample) {
 	if((p>0 && sample.burn) || (p<=-1 && !sample.burn)){
 		if(p>0)
 			std::cout << "Predigo que la siguiente puerta está encendida" << std::endl;
-		else if(p<-0) std::cout << "Predigo que la siguiente puerta está apagada" << std::endl;
+		else if(p<0) std::cout << "Predigo que la siguiente puerta está apagada" << std::endl;
 		std::cout << "Ha clasificao de puta madre" << std::endl;
 		this->classifySuccesses++;
-	} else if ((p<=-0 && sample.burn) || (p>0 && !sample.burn)){
+	} else if ((p<=0 && sample.burn) || (p>0 && !sample.burn)){
 		if(p>0)
 			std::cout << "Predigo que la siguiente puerta está encendida" << std::endl;
 		else if(p<0) std::cout << "Predigo que la siguiente puerta está apagada" << std::endl;
@@ -83,9 +88,17 @@ void SVMachine::classifySample(Sample sample) {
 
 bool SVMachine::isDoorOnFire(double input[]) {
 	ET aux(0.0);
+	std::vector<double> entradaScalada;
+	for(int i=0; i<nFeatures; i++)
+		entradaScalada.push_back(input[i]);
+	std::vector<Sample> sInput;
+	Sample s;
+	s.input = entradaScalada;
+	sInput.push_back(s);
+	Utils::scalation(sInput);
 	arma::Col<double> Input(nFeatures);
 	for(int i=0; i<nFeatures; i++)
-		Input(i)=input[i];
+		Input(i)=sInput[0].input[i];
 	for(int i=0; i<trainingSet.size(); i++){
 		if(SupportVectors.at(i) > 0.0){
 			aux += ET(SupportVectors.at(i))*ET(y.at(i))*kernel->K(X.row(i).t(), Input);
@@ -114,7 +127,7 @@ void SVMachine::quadraticSolution() {
 	int m = 1; // Entiendo que es el numero de restricciones
 	Program qp (CGAL::EQUAL);
 	// Obtengo la X
-//	Utils::scalation(trainingSet); // Escalado de parámetros
+	Utils::scalation(trainingSet); // Escalado de parámetros
 	X = arma::mat(n, nFeatures);
 	for(int i=0; i<n; i++){
 		for(int j=0; j<nFeatures; j++){
@@ -144,6 +157,7 @@ void SVMachine::quadraticSolution() {
 	qp.set_c0(ET(0));
 
 	// Seteo la symmetric positive-semidefinite matrix
+	#pragma omp parallel for
 	for(int i=0; i<n; i++){
 		for(int j=0; j<=i; j++){
 			ET ip = kernel->K(X.row(i).t(),X.row(j).t());
@@ -179,7 +193,7 @@ void SVMachine::quadraticSolution() {
 		std::cout << "Y el valor de b es: "<< this->b << std::endl;
 	} else std::cout << "No es optima, vete tu a saber por qué...\n";
 
-	int pausa; std::cin >> pausa;
+//	int pausa; std::cin >> pausa;
 }
 
 void SVMachine::trainByQuadraticProgramming() {

@@ -11,4 +11,4 @@ MORE_INCLUDES= KVMachine.cpp LRMachine.cpp NNMachine.cpp SVMachine/SVMachine.cpp
 all: $(MAINFILE) 
 
 $(MAINFILE): $(MAINFILE).cpp
-	$(GCC) $(CFLAGS) $(MAINFILE).cpp -o $(OBJFILE) -I $(INC_DIR) $(MORE_INCLUDES) $(SVMKernels) -L$(LIB_DIR) $(LIBS) -frounding-math
+	$(GCC) $(CFLAGS) $(MAINFILE).cpp -o $(OBJFILE) -I $(INC_DIR) $(MORE_INCLUDES) $(SVMKernels) -L$(LIB_DIR) $(LIBS) -frounding-math -fopenmp
