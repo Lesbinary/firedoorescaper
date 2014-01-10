@@ -11,15 +11,17 @@ SVMachine::SVMachine() {
 	kernel = new LinearKernel();
 	classifySuccesses = 0;
 	nFeatures = 0;
+	m=0;
 }
 
 SVMachine::SVMachine(KernelType t) {
 	classifySuccesses = 0;
 	nFeatures = 0;
+	m=0;
 	switch(t){
 	case Linear: kernel = new LinearKernel();
 		break;
-	case Polynomial: kernel = new PolynomialKernel(4);
+	case Polynomial: kernel = new PolynomialKernel(2);
 		break;
 	case RBF: kernel = new RBFKernel();
 		break;
@@ -157,7 +159,6 @@ void SVMachine::quadraticSolution() {
 	qp.set_c0(ET(0));
 
 	// Seteo la symmetric positive-semidefinite matrix
-	#pragma omp parallel for
 	for(int i=0; i<n; i++){
 		for(int j=0; j<=i; j++){
 			ET ip = kernel->K(X.row(i).t(),X.row(j).t());

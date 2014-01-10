@@ -33,7 +33,7 @@ public:
 				break;
 			case neuralNetwork: machine = new NNMachine();
 				break;
-			case SVM: machine = new SVMachine(Polynomial);
+			case SVM: machine = new SVMachine(RBF);
 				break;
 		}
 	}

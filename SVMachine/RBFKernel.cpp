@@ -28,7 +28,7 @@ CGAL::MP_Float RBFKernel::computeGamma() {
 
 CGAL::MP_Float RBFKernel::squaredEuclidean(arma::vec X1, arma::vec X2) {
 	double sum = 0.0;
-	#pragma omp parallel for
+//	#pragma omp parallel for
 	for(int i=0; i< X1.size(); i++){
 		sum+=std::pow(X1.at(i)-X2.at(i),2);
 //		std::cout << "Para el elemento " << i << " la distancia suma: " << sum << std::endl;
