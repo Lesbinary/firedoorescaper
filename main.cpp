@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 
 using namespace FireDoorEscaper;
@@ -74,8 +75,8 @@ main(int argvc, char *argv[]) {
 	 int nivelDeJuego;
 	 int maquinaElegida;
 	 double lambda;
-
-
+	 bool creaTraining = false;
+	 int num_max = 0;
 
 
     // Obtengo parametros e inicializo
@@ -98,6 +99,10 @@ main(int argvc, char *argv[]) {
     	case 3: // SVM
     		machine = new GodMachine(SVM);
     		break;
+    	case 4: //crear fichero training
+    		std::cout << "De cuanto desea crear el training: ";
+    		std::cin >> num_max;
+    		creaTraining = true;
     	default: // Por defecto
     		machine = new GodMachine(LogisticRegresion);
     		break;
@@ -151,48 +156,79 @@ main(int argvc, char *argv[]) {
     // Main loop: stay will the game is on (i.e. the player is alive)
     std::cout << "Empezamos el juego: " << std::endl;
     while (game->getGameStatus() == CGame::GS_PLAYING) {
-    	machine->clearTrainingSet();
-//    	if(game->getDoorsPassed() + 1 > minDoorsToNextLevel){
-//    		int cLevel = game->getLevel();
-//    		game = new CGame(cLevel+1);
-//    	}
 
-        const CFireDoor& fd = game->getCurrentFireDoor();
-        //printGameStatus(*game);
+    	if(!creaTraining){
+			machine->clearTrainingSet();
+	//    	if(game->getDoorsPassed() + 1 > minDoorsToNextLevel){
+	//    		int cLevel = game->getLevel();
+	//    		game = new CGame(cLevel+1);
+	//    	}
 
-        //Almacenamos el conjunto de entrenamiento
-    	while(!machine->isTrainingReady()){
-    		Sample s;
-            printGameStatus(*game);
-            s.input=fd.getNextStepInputs();
-            game->nextStep();
-            s.burn=fd.isOnFire();
-            machine->addTrainingSample(s);
-        }
-    	//Hago esto para obtener un vector de doubles de los input
-    	std::vector<double> vIn = fd.getNextStepInputs();
-    	double* in = &vIn[0];
-    	while(!machine->isReadyToCross() || machine->isDoorOnFire(in)){
-    		Sample s;
-    		printGameStatus(*game);
-            s.input=fd.getNextStepInputs();
-            game->nextStep();
-            s.burn=fd.isOnFire();
-            machine->classifySample(s);
-            vIn = fd.getNextStepInputs();
+			const CFireDoor& fd = game->getCurrentFireDoor();
+			//printGameStatus(*game);
+
+			//Almacenamos el conjunto de entrenamiento
+			while(!machine->isTrainingReady()){
+				Sample s;
+				printGameStatus(*game);
+				s.input=fd.getNextStepInputs();
+				game->nextStep();
+				s.burn=fd.isOnFire();
+				machine->addTrainingSample(s);
+			}
+			//Hago esto para obtener un vector de doubles de los input
+			std::vector<double> vIn = fd.getNextStepInputs();
+			double* in = &vIn[0];
+			while(!machine->isReadyToCross() || machine->isDoorOnFire(in)){
+				Sample s;
+				printGameStatus(*game);
+				s.input=fd.getNextStepInputs();
+				game->nextStep();
+				s.burn=fd.isOnFire();
+				machine->classifySample(s);
+				vIn = fd.getNextStepInputs();
+			}
+			// Try to cross the current FireDoor
+			printGameStatus(*game);
+			std::cout << "**** TRYING TO CROSS THE DOOR ****\n";
+			game->crossFireDoor();
+			if (game->getGameStatus() != CGame::GS_PLAYING)
+				std::cout << "!!!!!!!!!!! PLAYER GOT BURNED OUT !!!!!!!!!!!!!!\n";
+			else
+				std::cout << "****** DOOR PASSED *****\n";
+    	}else{
+    		//Crear el TrainingSet
+    		int num_almacenados = 0;
+    		std::ofstream fo;
+
+    		fo.open("trainingFireDoorEscaper.txt",std::ios::out);
+
+    		if(fo.is_open()){
+    			const CFireDoor& fd = game->getCurrentFireDoor();
+    			while(num_almacenados < num_max){
+
+    				Sample s;
+    				printGameStatus(*game);
+    				s.input=fd.getNextStepInputs();
+    				game->nextStep();
+    				s.burn=fd.isOnFire();
+
+    				//add to training
+    			    for (unsigned i=0; i < s.input.size(); i++)
+    			        fo << s.input[i] << " ";
+    			    fo << s.burn << std::endl;
+
+    			    num_almacenados++;
+    			}
+    			fo.close();
+    		}else
+    			std::cout << "fail, el archivo no se abre" << std::endl;
+
     	}
-        // Try to cross the current FireDoor
-        printGameStatus(*game);
-        std::cout << "**** TRYING TO CROSS THE DOOR ****\n";
-        game->crossFireDoor();
-        if (game->getGameStatus() != CGame::GS_PLAYING)
-            std::cout << "!!!!!!!!!!! PLAYER GOT BURNED OUT !!!!!!!!!!!!!!\n";
-        else
-            std::cout << "****** DOOR PASSED *****\n";
-
     }
 
     // Game Over
     delete game;
     return 0;
 }
+
