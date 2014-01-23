@@ -76,6 +76,7 @@ main(int argvc, char *argv[]) {
 	 int maquinaElegida;
 	 double lambda;
 	 bool creaTraining = false;
+	 bool gameover = false;
 	 int num_max = 0;
 
 
@@ -155,7 +156,7 @@ main(int argvc, char *argv[]) {
     game->setGameDifficultyMode(CGame::GDM_LEVELUP);
     // Main loop: stay will the game is on (i.e. the player is alive)
     std::cout << "Empezamos el juego: " << std::endl;
-    while (game->getGameStatus() == CGame::GS_PLAYING) {
+    while (game->getGameStatus() == CGame::GS_PLAYING && gameover == false) {
 
     	if(!creaTraining){
 			machine->clearTrainingSet();
@@ -214,13 +215,15 @@ main(int argvc, char *argv[]) {
     				s.burn=fd.isOnFire();
 
     				//add to training
-    			    for (unsigned i=0; i < s.input.size(); i++)
-    			        fo << s.input[i] << " ";
-    			    fo << s.burn << std::endl;
+    			    for (unsigned i=0; i < s.input.size()-1; i++)
+    			        fo << s.input[i] << ";";
+			    fo << s.input[s.input.size()-1];
+    			    fo << std::endl << s.burn << std::endl;
 
     			    num_almacenados++;
     			}
     			fo.close();
+			gameover = true;
     		}else
     			std::cout << "fail, el archivo no se abre" << std::endl;
 

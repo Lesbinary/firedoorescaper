@@ -1,3 +1,3 @@
 FILE(REMOVE_RECURSE
-  "/home/leopoldo/workspaceC/fretsonfire/lib/libFireDoorEscaper.a"
+  "/home/leopoldo/p2ra/firedoorescaper/lib/libFireDoorEscaper.a"
 )

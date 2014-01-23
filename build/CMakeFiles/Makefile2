@@ -43,11 +43,14 @@ CMAKE_COMMAND = /usr/bin/cmake
 # The command to remove a file.
 RM = /usr/bin/cmake -E remove -f
 
+# Escaping for special characters.
+EQUALS = =
+
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/leopoldo/workspaceC/fretsonfire/src
+CMAKE_SOURCE_DIR = /home/leopoldo/p2ra/firedoorescaper/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/leopoldo/workspaceC/fretsonfire/build
+CMAKE_BINARY_DIR = /home/leopoldo/p2ra/firedoorescaper/build
 
 #=============================================================================
 # Target rules for target CMakeFiles/FireDoorEscaper.dir
@@ -56,7 +59,7 @@ CMAKE_BINARY_DIR = /home/leopoldo/workspaceC/fretsonfire/build
 CMakeFiles/FireDoorEscaper.dir/all:
 	$(MAKE) -f CMakeFiles/FireDoorEscaper.dir/build.make CMakeFiles/FireDoorEscaper.dir/depend
 	$(MAKE) -f CMakeFiles/FireDoorEscaper.dir/build.make CMakeFiles/FireDoorEscaper.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/leopoldo/workspaceC/fretsonfire/build/CMakeFiles  1 2 3
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/leopoldo/p2ra/firedoorescaper/build/CMakeFiles  1 2 3
 	@echo "Built target FireDoorEscaper"
 .PHONY : CMakeFiles/FireDoorEscaper.dir/all
 
@@ -66,9 +69,9 @@ all: CMakeFiles/FireDoorEscaper.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/FireDoorEscaper.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/leopoldo/workspaceC/fretsonfire/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/leopoldo/p2ra/firedoorescaper/build/CMakeFiles 3
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/FireDoorEscaper.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/leopoldo/workspaceC/fretsonfire/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/leopoldo/p2ra/firedoorescaper/build/CMakeFiles 0
 .PHONY : CMakeFiles/FireDoorEscaper.dir/rule
 
 # Convenience name for target.
