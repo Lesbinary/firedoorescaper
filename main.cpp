@@ -78,6 +78,8 @@ main(int argvc, char *argv[]) {
 	 bool creaTraining = false;
 	 bool gameover = false;
 	 int num_max = 0;
+	 int num_training = 0;
+	 int num_test = 0;
 
 
     // Obtengo parametros e inicializo
@@ -103,6 +105,9 @@ main(int argvc, char *argv[]) {
     	case 4: //crear fichero training
     		std::cout << "De cuanto desea crear el training: ";
     		std::cin >> num_max;
+
+    		num_training = (num_max*80)/100;
+    		num_test = num_max - num_training;
     		creaTraining = true;
     	default: // Por defecto
     		machine = new GodMachine(LogisticRegresion);
@@ -206,7 +211,8 @@ main(int argvc, char *argv[]) {
 
     		if(fo.is_open()){
     			const CFireDoor& fd = game->getCurrentFireDoor();
-    			while(num_almacenados < num_max){
+
+    			while(num_almacenados < num_training){
 
     				Sample s;
     				printGameStatus(*game);
@@ -217,15 +223,40 @@ main(int argvc, char *argv[]) {
     				//add to training
     			    for (unsigned i=0; i < s.input.size()-1; i++)
     			        fo << s.input[i] << ";";
-			    fo << s.input[s.input.size()-1];
+    			    fo << s.input[s.input.size()-1];
     			    fo << std::endl << s.burn << std::endl;
 
     			    num_almacenados++;
     			}
+
     			fo.close();
-			gameover = true;
+    			fo.open("testFireDoorEscaper.txt",std::ios::out);
+    			num_almacenados = 0;
+
+    			if(fo.is_open()){
+					while(num_almacenados < num_test){
+						Sample s;
+						printGameStatus(*game);
+						s.input=fd.getNextStepInputs();
+						game->nextStep();
+						s.burn=fd.isOnFire();
+
+						//add to training
+						for (unsigned i=0; i < s.input.size()-1; i++)
+							fo << s.input[i] << ";";
+						fo << s.input[s.input.size()-1];
+						fo << std::endl << s.burn << std::endl;
+
+						num_almacenados++;
+					}
+					fo.close();
+
+    			}else
+    				std::cout << "fail, el archivo de test no se abre" << std::endl;
+
+    			gameover = true;
     		}else
-    			std::cout << "fail, el archivo no se abre" << std::endl;
+    			std::cout << "fail, el archivo de training no se abre" << std::endl;
 
     	}
     }
