@@ -1,6 +1,6 @@
-#FireDoorEscaper
+# FireDoorEscaper
 
-##Ejercicio de prueba para la práctica 2 de Razonamiento Automático (2013/2014)
+## Ejercicio de prueba para la práctica 2 de Razonamiento Automático (2013/2014)
 
 
 Paquetes necesarios:
